@@ -15,9 +15,11 @@ And who's going to tell me if the settings, the stage, and the supporting actors
 
 Maybe I should add environment variable initializations into `run.sh`. Then add a few `if` statements verifying that paths exist. I'll run `ldd` and `grep` to check if the linked libraries exist and are the right version. Then extract these repeated operations into a separate function and put them somewhere else. Maybe I'll call it `doctor`!
 
-The annoying thing about whatever [which](https://docs.brew.sh/Manpage#doctor-dr---list-checks---audit-debug-diagnostic_check-) [doctor](https://docs.flutter.dev/get-started/install/windows#run-flutter-doctor) you have, is that unlike human doctors that give you a prescription, these code doctors just tell you what might be broken, and then _you have to find the prescription_. In the end, I'm in the operating room. You should be called nurse.
+I lied. The annoying thing about whatever [which](https://docs.brew.sh/Manpage#doctor-dr---list-checks---audit-debug-diagnostic_check-) [doctor](https://docs.flutter.dev/get-started/install/windows#run-flutter-doctor) you have, is that unlike human doctors that give you a prescription, these code doctors just tell you what might be broken, and then _you have to find the prescription_. In the end, I'm in the operating room. You should be called nurse [^doctor-command-readability].
 
-#TODO (insert graphic here?)
+![self-serve doctor](./img/2022/01/2022-01-20_155608.png)
+
+[^doctor-command-readability]: I have to admit, `brew doctor` rolls off the tongue better than `brew nurse`. But still, no coat for you.
 
 It's more effective to describe how to reliably get to the correct state. And now, we have a dependency management problem, although it's a better problem: it's simpler to specify how to work forward from a kernel that grows into tree, than whacking moles playing hide and seek in the leaves of an already big tree.
 
@@ -31,11 +33,11 @@ For projects, what we need is a foolproof guide to put us in the correct state w
 
 # starting with the plainest of texts
 
-## remembering the ~~BIG BANG~~ genesis
+## remembering the genesis command
 
 These days, many frameworks have scaffolding commands, like `npx create-next-app my-nuxt-app`, `lein new app my-boot-app`, `rails new my-sinatra-app`, that generate a runnable project skeleton. They also generate README files, but don't record _how_ the project was created (try `lein new luminus my-project +aleph +http-kit +h2 +sqlite +shadow-cljs +war +auth`). So the first thing I do is record the command somewhere. When revisiting a shelved project, the underlying framework versions and template commands may have changed, so it is important to record how the world appeared out of nowhere.
 
-It's also sensible to add the BIG BANG command into a git commit, but sometimes I am so clever and write something like `initial commit`. Sometimes I make modifications before first light, maybe because I'm following a guide, I cloned a sample repo, or because the generator creates junk I don't want in the commit: multi-platform scripts, unusued database seed files, sample files with 🎉 emojis congratulating me in understanding instructions (everything is so complicated now, it's important to reward every step). If I forgot to commit the genesis command, I'd want to stuff it in a README or another text file.
+It's also sensible to add the genesis command into a git commit, but sometimes I am so clever and write something like `initial commit`. Sometimes I make modifications before commiting, maybe because I'm following a guide, I cloned a sample repo, or because the generator creates junk I don't want in the commit: multi-platform scripts, unusued database seed files, sample files with 🎉 emojis congratulating me in understanding instructions (everything is so complicated now, it's important to reward every step). If I forgot to commit the genesis command, I'd want to stuff it in a README or another text file.
 
 Still here? Prize! 🎉🎉🎉
 
@@ -49,12 +51,19 @@ That would certainly set a bar for quality. So the "README" name carries weight 
 
 So now your README is Truth but minimal, and doesn't list all the possible commands that you need to know -- doing that for something like [awscli](https://github.com/aws/aws-cli#basic-commands) would be disasterotaculous (awscli 1.20.54 has 286 subcommands [^aws-cli-subcommands]). But you need to remember; what do?
 
-[^aws-cli-subcommands]:
-				interestingly, getting this number was not as straightforward as I expected, because `aws help` [prints funny stuff](https://github.com/aws/aws-cli/issues/5455). So ultimately, this is what I ended up with: `aws --no-paginate help | col -b | sed -e '1,/AVAILABLE SERVICES/d' | sed '/SEE ALSO/Q' | grep ' o ' | wc -l`, which translates to: spit the `aws` non-paginated help (else your pipe gets no output), `col` remove all control characters except the final column, `sed` remove all lines up until and including `AVAILABLE SERVICES`, `sed` remove all lines including and after `SEE ALSO`, `grep` all lines with the `o` entry marker, `wc` count lines.
+[^aws-cli-subcommands]: interestingly, getting this number was not as straightforward as I expected, because `aws help` [prints funny stuff](https://github.com/aws/aws-cli/issues/5455). So ultimately, this is what I ended up with:
+	```sh
+	aws --no-paginate help                # spit non-paginated help (else your pipe gets no output)
+      | col -b                            # remove all control characters except the final column
+	  | sed -e '1,/AVAILABLE SERVICES/d'  # remove all lines up until and including `AVAILABLE SERVICES`
+	  | sed '/SEE ALSO/Q'                 # remove all lines including and after `SEE ALSO`
+	  | grep ' o '                        # keep lines with ' o ' marker
+      | wc -l                             # count lines
+    ```
 
 For shell interaction, sometimes I use a run log: run some commands, check the output, and if everything looked good, copy-paste everything into a file called `run.log` in the project directory. I still do this when no tools are available. [^shell-recording-tools] I also know big-head people who just review `history`, but since I can't remember context, I prefer to record as I go.
 
-[^shell-recording-tools]: `script` might be the most prevalent tool on bare machines, and there are more sophisticated tools like `asciinema`, but I have not found them to be the most suitable for self reminders:
+[^shell-recording-tools]: [script](https://man7.org/linux/man-pages/man1/script.1.html) might be the most prevalent tool on bare machines, and there are more sophisticated tools like [asciinema](https://asciinema.org/), but I have not found them to be the most suitable for self reminders:
 				- the output format is not human-first
 				- it captures everything: treasure and trash
 				- I want to edit as I go (when I have the most mental context), instead of edit afterwards
@@ -62,13 +71,13 @@ For shell interaction, sometimes I use a run log: run some commands, check the o
 
 At one point I wrote a shell function `rr <command>` that automated recording the command and output into `run.log`, or if I just finished running a command, `rr` would append the previous command (via `fc -ln -1`) to the log. This was a failure: among other problems [^other-problems-with-rr], when I want to run `<something>`, I am not *inclined* to run `rr <something>`; on the other hand, after I run `<something>`, I won't *remember* to run `rr`.
 
-[^other-problems-with-rr]:
-				- a dumb command wrapper with pipes interferes with running character-mode programs
-				- forgetting to run `rr` breaks the flow if the command modifies the system
-				- wrong arguments, stale inputs, re-run of commands by mistake means cleaning up the log
-				- sometimes you can't predict how much output the program will create
-				- sometimes you can't predict how long the program will run
-				- it interferes with a flow of background/resume/pkill
+[^other-problems-with-rr]: other problems with using a command-capture wrapper function:
+	- a dumb command wrapper with pipes interferes with running character-mode program
+	- forgetting to run `rr` breaks the flow if the command modifies the system
+	- wrong arguments, stale inputs, re-run of commands by mistake means cleaning up the log
+	- sometimes you can't predict how much output the program will create
+	- sometimes you can't predict how long the program will run
+	- it interferes with a flow of background/resume/pkill
 
 I also rarely bothered to revisit `run.log`. When you're adding to the log, everything makes sense! When you're revisiting a week later, nothing makes sense, so you start from the beginning. Now, when you're adding to the log, everything makes sense! Déjà vu?! Wait...
 
@@ -80,13 +89,15 @@ To really make the log file useful, you need to have discipline: clean it up dil
 
 Working with `org-mode` in Emacs means it only takes a few keystrokes to run a command and capture its output in the same file. This addresses the pain point of having to remember to record the contents and outputs of important commands. As a result, all my documentation was in org-mode for a time. Filtering files in bash, saving the results to a variable, and processing the result in python, then plotting the output in R, all in the same file, is a magical feeling.
 
-[![asciicast](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE.svg)](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE)
+[![asciicast](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE.png)](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE)
 
-To see org used effectively, see the demonstration in [literate devops with Emacs](http://howardism.org/Technical/Emacs/literate-devops.html) by Howard Abrams. As impressive as it is, I don't recommend this approach anymore.
+To see org used effectively, see the demonstration in [literate devops with Emacs](http://howardism.org/Technical/Emacs/literate-devops.html) by Howard Abrams. As impressive as it is, I don't recommend this approach.
 
-The first two problems, in practice:
+The two main problems, in practice:
 1. most people don't use Emacs
 2. among people who use Emacs, less are proficient in org-mode, and of those who are proficient, less are as proficient as Howard.
+
+![[img/2022/01/emacs-users-diagram.svg]]
 
 We can easily export org files into nicely-typesetted, syntax highlighted, publication-quality documents, but the exported files, be them HTML or PDF documents, are optimized for archival and consumption, not interaction and modification. The moment you send an export to a colleague, you'll see them extending it in the company-sanctioned WYSIWYG editor, leading to cosmic visual torture of code blocks in Sans-Serif font. The moment you send the original org source to a colleague, you'll hear them converting it to their favorite flavor of markdown, and you wonder why you didn't just send the output of `org-md-export-to-markdown` (but the voice on your shoulder whispers _just use markdown_).
 
@@ -94,7 +105,7 @@ In the end, you got the information across, so where's the problem?
 
 Firstly, the commands are part of an interactive, living system. Your org file and your colleague's markdown, while structured around two different brains, should model the same truth. The representatation of truth changed from an org-wrapped representation to an org-plus-markdown-wrapped representation. Let's say a 3rd colleague joins the team with their 3 Letter-sized pages of 12pt 1" margin Arial font notes. Now you have to co-maintain the shared truth, and more layers of wrapping means more effort.
 
-Less impedance of tools means faster output. At this point, markdown tooling is so much more extensive and widespread that I hesitate to recommend `org-mode` for the locus of documentation, including to myself. While structured plain-text markup files should easily [convert between each other](https://pandoc.org/), maintaining true compatibility means avoiding advanced features like code blocks in `org-mode`.
+Less impedance of tools means faster output. Markdown tooling has gotten so much more extensive and widespread that I hesitate to recommend `org-mode` for the locus of documentation, including to myself. While structured plain-text markup files should easily [convert between each other](https://pandoc.org/), maintaining true compatibility means avoiding advanced features like code blocks in `org-mode`.
 
 That said, there are still some situations where org-mode can be the best tool at hand. For example, when HashiCorp's HCL didn't support composition, I used `noweb` in org-babel to maintain global resource constants, and tangled out updated `hcl` files for `terraform`. I then executed all `terraform` (with `-auto-approve`) commands from the org file with all outputs saved. It works best within a small, contained level of complexity, and a small number of brains.
 
@@ -106,29 +117,28 @@ That said, there are still some situations where org-mode can be the best tool a
 	- I wrote [ob-shstream](https://github.com/whacked/ob-shstream) for working with asynchronous / long-running processes, but all things considered, there are better methods.
 - code block line numbers don't match line error messages
 - commands with massive output or long lines can cripple Emacs
-- remoting requires configuring the remote shell, special header directives in shell blocks, running a separate shell process (`M-x shell` or maybe `vterm`, as separate challenge), and various other things you figure out on a Saturday afternoon when you realize maybe you've really gone too far. But wait, it looks pretty close, one more fix!
+- remoting requires configuring the remote shell, special header directives in shell blocks, running a separate shell process (`M-x shell` or maybe `vterm`, as separate challenge), and various other things you figure out on a Saturday afternoon when you realize maybe you've really gone too far. But wait, it looks pretty close, just one more fix!
 
 ## jupyter notebooks
 
-Circa 2017, IPython notebooks started replacing Emacs for a lot of my executable documentation. The bash kernel <https://github.com/takluyver/bash_kernel> addresses most of the problems with command and output management for shell scripts, including those with long-running processes and large output. I tried keeping text in Emacs using [ein](https://github.com/millejoh/emacs-ipython-notebook), but in the end, server + browser remains the easiest to remember.
+Circa 2017, IPython notebooks started replacing Emacs for a lot of my executable documentation. The [bash kernel](https://github.com/takluyver/bash_kernel) addresses most of the problems with command and output management for shell scripts, including those with long-running processes and large output. I using [ein](https://github.com/millejoh/emacs-ipython-notebook) to stay in Emacs + org-mode, but in the end, server + browser remains the easiest to remember.
 
 IPython and Jupyter are excellent tools that have changed the industry; the great features of notebooks are widely covered elsewhere, so I will focus on limitations, particularly as they relate to a system for remembering how to execute code and programs within a project.
 
 ### limitations
 -   one language at a time [^multi-kernel-solutions]
 - backwards compatibility issues between IPython notebook and Jupyter lab [^ipython-jupyter-incompatibility]
--  notebooks are stored in JSON, and JSON:
-	- is not human friendly, and is, for all intents and purposes, not grep-friendly
+-  notebooks are stored in JSON, which:
+	- is not human friendly, and is generally not grep-friendly
 	- not a good fit for output log storage
 	- hard to diff readably
 	- as an aside, using Emacs EIN _does_ allow for a human-friendly text file notebook, but the pros from having features in the browser-based notebook outweigh the pros of having a human-friendly file
-- refactoring is a hassle, and it's trivially easy to end up with linearly organized notes but a non-linear execution order; [gather](https://github.com/microsoft/gather) aims to solve this problem, but I have reservations about this approach: it appears to alleviate the burden of code organization for runnability, but the core issue is actually understandability.
+- refactoring is a hassle, and it's trivially easy to end up with linearly organized notes but a non-linear execution order; [gather](https://github.com/microsoft/gather) aims to solve this problem, but I have reservations about this approach: it ameliorates the burden of code organization for runnability, but the core issue is actually understandability.
 -  For local rendering, ipynb files look best in ipython notebook/jupyter lab. Sometimes nTeract, sometimes VS code, in that order, but viewing the notebooks just for reference can be a hassle.
 -  CodeMirror is a very good editor, but is not a purebred text manipulator like Emacs nor Vim
--  using `bash_kernel` on to reach a remote machine requires fooling the kernel by hacking `PS1` [^bash-kernel-ssh]
--  as of this writing, no STDIN support for `bash_kernel`, so processes reading from STDIN will hang on input
+-  using `bash_kernel` to reach a remote machine requires fooling the kernel by hacking `PS1` [^bash-kernel-ssh]
+-  as of this writing, no STDIN support for `bash_kernel`, so processes reading from STDIN hang on input
 -  sometimes the process output breaks and restarting the kernel is the only way out
--  shared evaluation session allows the undisciplined (me) user to easily lose track of execution dependencies and evaluation order
 -  no simple way to edit outputs for generalization / obfuscation purposes
 -  only a single evaluation is kept, which makes it difficult to compare time-specific outputs in-notebook [^multi-outputs-plugin]
 
@@ -141,13 +151,17 @@ IPython and Jupyter are excellent tools that have changed the industry; the grea
 
 ## Makefile
 
-My experience with `make` is almost from entirely building software someone else wrote, and I understand maybe 5% of the syntax. But for running lightweight, well-defined, cacheable pipelines, like codegen and asset syncing, `make` is the best tool I know. I don't think the syntax is very pleasant (I found [tup](https://gittup.org/tup/ex_multiple_directories.html) easier to reason about), but after looking around tools like tup, [dvc] (https://dvc.org), [ninja](https://ninja-build.org), and a few others, there doesn't seem to be anything as lightweight, fast, and practically ubiquitous, for managing local, low-complexity program pipelines.
+My experience with `make` is almost entirely from building software someone else wrote, and I understand maybe 5% of the syntax. But for running lightweight, well-defined, cacheable pipelines, like codegen and asset syncing, `make` is the best tool I know. I don't think the syntax is very pleasant (I found [tup](https://gittup.org/tup/ex_multiple_directories.html) easier to reason about), but after looking around tools like tup, [dvc](https://dvc.org), [ninja](https://ninja-build.org), and a few others, there doesn't seem to be anything as lightweight, fast, and practically ubiquitous, for managing local, low-complexity program pipelines.
 
-For example, I use `make` to generate project skeletons from a shared upstream directory. When the directory changes, I use a syncing target to update compatible changes into the downstream repository. For comparison, I don't know how to do this nicely in a `leiningen` project with shared, non-packaged dependencies, so syncing co-dependent projects is either a manual process, or cobbled together with nested macros in `project.clj`.
+The [inventor of Erlang](https://en.wikipedia.org/wiki/Joe_Armstrong_(programmer)) seems to agree[^joe-armstrong-grunt]:
 
-How do I remember what targets in `make` to run? I always include from a shared (upstream) Makefile with a `help` target:
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">life is too short to learn/fix/debug grunt - WTF is wrong with Make ?</p>&mdash; Joe Armstrong (@joeerl) <a href="https://twitter.com/joeerl/status/505802969510842368?ref_src=twsrc%5Etfw">August 30, 2014</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-`/path/to/shared/Makefile`:
+[^joe-armstrong-grunt]: Armstrong [did](https://www.youtube.com/watch?v=lKXe3HUG2l4) figure out how to use [Grunt](https://gruntjs.com/), although replies to his tweet would suggest [gulp](https://gulpjs.com/) is a better tool. I got those programs to work with their guides on the first try, so take that, Joe Armstrong! But after many weeks and 57 new Node versions, I don't remember how to grunt or gulp anymore, but I can probably make (out of the box).
+
+For example, I use `make` to generate project skeletons from a shared upstream directory. When the directory changes, I use a syncing target to update compatible changes into the downstream repository. For comparison, I don't know how to do this nicely in a `leiningen` project with shared, non-packaged dependencies, so syncing co-dependent projects is either a manual process, or cobbled together with nested macros in the project description file.
+
+How do I remember what targets in `make` to run? I don't, because forgetting things is what I do. So I use a shared (upstream) Makefile with a `help` target, e.g. `/path/to/shared/Makefile`:
 
 ```makefile
 # helper target modified from: https://stackoverflow.com/a/59087509
@@ -165,7 +179,7 @@ shared-process:
 	run something useful
 ```
 
-`project/Makefile`:
+then by habit, `include` it in a downstream project, e.g. `project/Makefile`:
 
 ```makefile
 include /path/to/shared/Makefile
@@ -187,9 +201,9 @@ do-stuff        run this to do the thing
 shared-process  a very useful sentence describing the process
 ```
 
-What's more, zsh understands Makefiles out of the box, so tab completion comes for free!
+What's more, `zsh` understands Makefiles out of the box, so tab completion comes for free!
 
-This usage may be antithetical to the common usage in building software via `./configure; make; make install`. Perhaps if there's a build specification file -- `Makefile`, `Tupfile`, `build.ninja` -- running the build program already means you want to build _right now_. But some other "builder programs" like `cargo`, `lein`, `go`, `flutter`, when called without a `build` or `compile` argument, print a help message with a list of available commands. It seems like these programs don't infer intent without an explicit verb, and they will tell you what verb to use. Some manager programs even detect typos:
+This usage may be antithetical to the common usage in building software via `./configure; make; make install`. Perhaps if there's a build specification file -- `Makefile`, `Tupfile`, `build.ninja` -- invoking the build program implies you want to build _right now_. But some other "builder programs" like `cargo`, `lein`, `go`, `flutter`, when called without a `build` or `compile` argument, print a help message with a list of available commands -- they don't infer intent without an explicit verb, and instead tell you what verbs to use. Some manager programs now give suggestions and even detect typos:
 
 - `pip` produces suggestions [by text similarity with valid commands](https://github.com/pypa/pip/blob/7f8a6844037fb7255cfd0d34ff8e8cf44f2598d4/src/pip/_internal/commands/__init__.py#L122)
 
@@ -198,7 +212,7 @@ $ pip isntal typo
 ERROR: unknown command "isntal" - maybe you meant "install"
 ```
 
-- `npm` [actually understands "instal" among several other typos](https://github.com/npm/cli/blob/f17aca5cdf355aaa7e1f517d1b3bb4213f4df092/lib/utils/cmd-list.js#L39)
+- `npm` [actually understands "instal", among several other typos](https://github.com/npm/cli/blob/f17aca5cdf355aaa7e1f517d1b3bb4213f4df092/lib/utils/cmd-list.js#L39)
 
 ```
 $ npm isntalll typo   
@@ -210,6 +224,8 @@ Usage: npm <command>
 Did you mean this?
     install
 ```
+
+Thanks for becoming more helpful!
 
 ## `project.json`
 
@@ -241,19 +257,21 @@ $
 ### limitations
 - no structured comments: this may be by design, but as a memory aid, it helps to have context
 - npm-native: doesn't make sense for non-node projects; otherwise, it creates temptation to stash management commands into the npm toolchain. If you have a Django backend with `django` management commands, you probably don't add django commands into `package.json`, so you still have to keep track of at least 2 command entrypoints: `npm run` and `python manage.py`.
-- package.json is [not designed for composability]([https://github.com/npm/npm/issues/8112#issuecomment-192489694](https://github.com/npm/npm/issues/8112#issuecomment-192489694); 10 projects with the same `npm run X` command would have 10 identical `"scripts": { "X": "same special command" }` entries. If I update `special command`, I would need to remember to update 9 other projects (I won't).
-- `package.json` is now a kitchensink metadata file, containing dependencies, to delcarations of [plugin](https://code.visualstudio.com/api/references/extension-manifest) [capabilities](https://flight-manual.atom.io/hacking-atom/sections/package-word-count/), to commands for for testing and building. It's sensible in that it's all data _about the package_ -- but so is the README. In the end, the distinction seems to be `package.json` for electrons and README for neurons. Since I'm losing neurons but not electrons, I have to play dangerously in machine land.
+- package.json is [not designed for composability](https://github.com/npm/npm/issues/8112#issuecomment-192489694); 10 projects with the same `npm run X` command would have 10 identical `"scripts": { "X": "same special command" }` entries. If I update `special command`, I would need to remember to update 9 other projects (I won't).
+- `package.json` is now a kitchensink metadata file, containing dependencies, to delcarations of [plugin](https://code.visualstudio.com/api/references/extension-manifest) [capabilities](https://flight-manual.atom.io/hacking-atom/sections/package-word-count/), to commands for testing and building. It's sensible in that it's all data _about the package_ -- but so is the README. In the end, the distinction seems to be `package.json` for electrons and README for neurons. Since neurons die but electrons live forever, we need better ways to make dryware assist the wetware.
 
 ### recollection bad? composition good!
 
-If you have a bunch of Node projects that follow a similar base dependency structure, and suddenly dependabot suggests updating dependencies all at once, one way to ease remembering which projects to update is by restructuring `package.json` files into an inheritance hierarchy; several tools exist with this functionality: [dhall](https://dhall-lang.org/), [cue](https://github.com/cue-lang/cue), straight javascript or typescript, but in my experience, [jsonnet](https://jsonnet.org/) offers the best feature set of a pure and complete JSON substitute [^jsonnet-quirks]
+If you have a bunch of Node projects that follow a similar base dependency structure, and suddenly dependabot suggests updating dependencies all at once, one way to ease remembering which projects to update is by restructuring `package.json` files into an inheritance hierarchy; several tools exist with this functionality: [dry-dry](https://github.com/Cosium/dry-dry)[^why-not-dry-dry], [dhall](https://dhall-lang.org/), [cue](https://github.com/cue-lang/cue), straight javascript or typescript, but in my experience, [jsonnet](https://jsonnet.org/) offers the best feature set of a pure and complete JSON substitute [^jsonnet-quirks]
+
+[^why-not-dry-dry]: `dry` is a package designed specifically to address `package.json` composability, and on paper, addresses the _copy paste madness_ that emerges across co-evolving projects. It introduces new syntax, files, and commands specifically for managing the package file, but composability is a problem more fundamental than the format or language, such that being an npm package looks like a drawback. Several other tools that directly attack the problem of composable data are much more attractive in comparison. They also play well with other programs in the shell, and have fast, pre-compiled, multi-platform binaries.
 
 - Jsonnet is a strict superset of JSON, which allows low-friction ease-in (as TypeScript does for JavaScript)
-- comes with syntax formatter (which works excellently in [Vim](https://github.com/google/vim-jsonnet)) and more regular syntax (that leads to cleaner diffs)
+- like the `Go` programming language, it comes with an official syntax formatter, which works excellently in [Vim](https://github.com/google/vim-jsonnet), and more regular syntax (like trailing commas, which leads to cleaner diffs)
 - loose importing means any jsonnet file can inherit from any other jsonnet/json file, which makes setting up composition very easy
-- easy [bindings for several popular languages](https://jsonnet.org/ref/bindings.html) including python and Node
+- straightforward [bindings for several popular languages](https://jsonnet.org/ref/bindings.html) including python and Node
 
-As an example for package inheritence then, I would have a shared package file:
+As an example for package inheritence then, let's start with a shared package file:
 
 ```
 $ cat super/package.jsonnet
@@ -277,7 +295,7 @@ $ head hobble/package.jsonnet web/package.jsonnet
 ==> hobble/package.jsonnet <==
 (import '../super/package.jsonnet') {
   dependencies+: {
-    pi: '^3.1.0',  // output looks better
+    pi: '^3.1.4',  // output looks better
   },
 }
 
@@ -322,7 +340,7 @@ Over the past several years I found the [nix package manager](https://nixos.org/
 
 Now, I am not an expert nix user, and the workflow described here may be non-standard, but it has worked better than anything else I have tried to date (if you know a better solution, I'd love to know [^nix-alternatives])
 
-[^nix-alternatives]: [Guix](https://guix.gnu.org/) comes up, but Nix has far more packages. [Spack](https://spack.io/) is also very interesting but I found Nix better for system-level integration, plus it has far more packages. Also, `ripgrep` recognizes the `.nix` filetype natively
+[^nix-alternatives]: [Guix](https://guix.gnu.org/) comes up, but Nix has far more packages. [Spack](https://spack.io/) is also very interesting but I found Nix better for system-level integration, plus it has far more packages. Also, `ripgrep` recognizes the `.nix` filetype out of the box
 
 ### reminding myself what I can do in a project
 
@@ -368,7 +386,7 @@ a huge benefit of defining environments this way is that composing different env
 
 let
   # use the webserver environment as a base
-  webserver = (pkgs.callPackage (import ./nix/webserver/default.nix) {});
+  webserver = (import ./nix/webserver/default.nix);
 in pkgs.mkShell {
   name = "composition-example";
 
@@ -386,10 +404,12 @@ in pkgs.mkShell {
 
   shellHook =
     ''
-	pastel paint -n cyan "including the webserver shell env..."
+	pastel paint -n cyan "INFO "
+    echo "including shell env from ${webserver.name}"
     ''
     + webserver.shellHook + ''
-    if (which shadow-cljs 2> /dev/null); then
+    export PATH=$(npm bin):$PATH
+    if (which shadow-cljs &> /dev/null); then
         echo "shadow-cljs is in $(which shadow-cljs)"
     else
 	    pastel paint -n white --on magenta "setting up a new shadow-cljs environment"
@@ -409,6 +429,10 @@ in pkgs.mkShell {
   '';
 }
 ```
+
+with the [echo-shortcuts](https://github.com/whacked/setup/blob/master/bash/nix_shortcuts.sh#L7) function included in `nativeBuildInputs`, we are greeted with basic colorized reminders
+
+[![asciicast](https://asciinema.org/a/eLNtcXqG5iK1L5H350QjbWZPC.svg)](https://asciinema.org/a/eLNtcXqG5iK1L5H350QjbWZPC)
 
 ### how to remember nix syntax
 
@@ -434,7 +458,7 @@ EOF
 }
 ```
 
-Then I add project package dependencies to `buildInputs`, add shared scripts to `nativeBuildInputs`, and shared shell initializations into `shellHook`. This works for most projects I create or import.
+Then I add project package dependencies to `buildInputs`, shared scripts to `nativeBuildInputs`, and shared shell initializations into `shellHook`. This works for most projects I create or import.
 
 If you do this, you'll proably be using less than 5% of nix's functionality. But there aren't many tools where 5% functionality gives you something close to a superpower. [^high-leverage-tools] Just imagine how popular you'll be by trivially running 5 different postgreSQL servers!
 
@@ -452,7 +476,7 @@ $
 
 Well, I certainly can say from experience, it doesn't make you popular at all. But if you're not popular anyway, why not pick up a superpower while you're at it?
 
-[^package-language]: to be clear, this is an artifact of being a package langauge, and [according to repology.org](https://repology.org/repositories/statistics), `nix_unstable` currently has over 60k packages, the highest of all repositories tracked
+[^package-language]: to be fair, this is an artifact of being a package langauge, and [according to repology.org](https://repology.org/repositories/statistics), `nix_unstable` currently has over 60k packages, the highest of all repositories tracked
 [^high-leverage-tools]: what else is there? smartphones? POSIX pipes? programming languages? spreadsheets?
 
 ### what if no pre-defined packages exist?
@@ -461,11 +485,11 @@ Every once in a while, something more special is needed (like [package](https://
 
 Fortunately, after having gone through many of these chases, I think on balance, this has brought me more time, happiness, and peace of mind than it has frustration. I was able pick up an old python2.7 project, activate its shell environment, and have it Do The Thing and that Blowed The Mind.
 
-Since Nix outputs are highly reusable, a one-time toil often leads to N-time productivity. I am happy standing on the shoulders of giants and walking on the backs of geese chasers, and adding `shell.nix` to code projects.
+Since Nix outputs are highly reusable, a one-time toil often leads to N-time productivity. The view is nicer, standing on the shoulders of giants; the road is smoother, following the footsteps of geese chasers. The environment is a reminder, adding `shell.nix` to your code projects.
 
 ## remembering what web apps do
 
-Sometimes you might make a single-purpose webserver to interact with information using the browser. A while ago I was [experimenting](https://github.com/whacked/demodemodemodemo/tree/master/schema-server) with json schemas using a little web server. Revisiting it after a few months, I no longer remember what it does.
+Sometimes you might make a single-purpose webserver to interact with information using the browser. A while ago I was [experimenting](https://github.com/whacked/demodemodemodemo/tree/master/schema-server) with json schemas using a little web server. Revisiting it after a few months, even with `default.nix` telling me how to _start_ the server, I no longer remember what it _does_.
 
 As a reminder, I expose the sitemap at the `/help` endpoint: [^help-endpoint]
 
@@ -483,50 +507,46 @@ ROUTES:
 It's a simple thing, and depending on the framework, this is a [solved](https://stackoverflow.com/questions/1275486/django-how-can-i-see-a-list-of-urlpatterns) [problem](https://guides.rubyonrails.org/routing.html#listing-existing-routes) in the command line or otherwise, but when I am interacting with the app through a browser, I like to receive the information also through the browser.
 
 [^help-endpoint]: `schema-server` uses a [data-as-routes](https://github.com/metosin/reitit) library for routing, so we create the help route by [creating a route handler with the routes mapping](https://github.com/whacked/demodemodemodemo/blob/e635dec2de9dd5f5279798129b375f73dd7e215f/schema-server/src/schema_server/server.cljs#L120) and adding that back into the routes. In `flask`, this can be achieved using `url_map` for a specific app
-
-```python
-@app.route('/help')
-def show_route_list():
-	from flask import render_template_string
-	route_list = []
-	for rule in app.url_map.iter_rules():
-		if rule.endpoint != 'static' and '<' not in rule.rule:
-			route_list.append((rule.rule, app.view_functions[rule.endpoint].__doc__ or ''))
-	route_list.sort()
-	return render_template_string('''
-	<ol>
-	{% for rule, doc in route_list %}
-	<li>
-		<a href="{{ rule }}">{{ rule }}</a> :: {{ doc }}
-	</li>
-	{% endfor %}
-	</ol>
-	''', route_list=route_list)
-```
-
-in `express`
-
-```javascript
-expressApp.get('/help', (req, res) => {
-	let ol: Array<any> = ["ol"]
-	expressApp._router.stack.forEach((layer) => {
-		if (!isEmpty(layer.route)) {
-			let li = ["li",
-				["div",
-					["a", { href: layer.route.path }, ["code", layer.route.path]],
-					Object.keys(layer.route.methods != null ? layer.route.methods : {}).map(
-						method => ["code", method]
-					),
-				]
-			]
-			ol.push(li)
-		}
+	```python
+	@app.route('/help')
+	def show_route_list():
+		from flask import render_template_string
+		route_list = []
+		for rule in app.url_map.iter_rules():
+			if rule.endpoint != 'static' and '<' not in rule.rule:
+				route_list.append((rule.rule, app.view_functions[rule.endpoint].__doc__ or ''))
+		route_list.sort()
+		return render_template_string('''
+		<ol>
+		{% for rule, doc in route_list %}
+		<li>
+			<a href="{{ rule }}">{{ rule }}</a> :: {{ doc }}
+		</li>
+		{% endfor %}
+		</ol>
+		''', route_list=route_list)
+	```
+	in `express`
+	```javascript
+	expressApp.get('/help', (req, res) => {
+	  let ol: Array<any> = ["ol"]
+	  expressApp._router.stack.forEach((layer) => {
+	    if (!isEmpty(layer.route)) {
+	  	let li = ["li",
+	  	  ["div",
+	  		["a", { href: layer.route.path }, ["code", layer.route.path]],
+	  		Object.keys(layer.route.methods != null ? layer.route.methods : {}).map(
+	  		  method => ["code", method]
+	  		),
+	  	  ]
+	  	]
+	  	ol.push(li)
+	    }
+	  })
+	  return respondHiccup(res, ["body", ol])
 	})
-
-	return respondHiccup(res, ["body", ol])
-})
-```
+	```
 
 # conclusion
 
-I share my experience in working with personal projects over the years, with strategies to help future me know what to do. If you liked it, please remember to HIT THAT LIKE BUTTON. Oh wait, there's no like button. I'll be happy if you find some of these experiences useful too.
+I share my past experience in working with personal projects over the years, with strategies to help future me know what to do. If present you liked it, please remember to HIT THAT LIKE BUTTON. Oh wait, there's no like button. Maybe a [star](https://github.com/whacked/cow) or a comment. In any case I'm happy if you find some of these experiences useful too.
