@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="401.59045mm"
+   height="159.52144mm"
+   viewBox="0 0 401.59046 159.52144"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="emacs-users-diagram.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.56569164"
+     inkscape:cx="814.04774"
+     inkscape:cy="439.28526"
+     inkscape:window-width="1996"
+     inkscape:window-height="1163"
+     inkscape:window-x="2050"
+     inkscape:window-y="1230"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-77.177109,211.46338)">
+    <rect
+       style="fill:#ececec;stroke:none;stroke-width:0.702296"
+       id="rect994"
+       width="401.59045"
+       height="159.52144"
+       x="77.177109"
+       y="-211.46338" />
+    <g
+       id="g51056"
+       transform="translate(0.84682271,1.503562)">
+      <g
+         id="g40541"
+         transform="translate(76.413747,-218.31285)">
+        <circle
+           style="fill:#6046a1;fill-opacity:1;stroke:none;stroke-width:0.529;stroke-miterlimit:4;stroke-dasharray:none"
+           id="path846"
+           cx="79.624283"
+           cy="85.106628"
+           r="68.327606" />
+        <circle
+           style="fill:#ffffff;stroke:none;stroke-width:0.529;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path846-9"
+           cx="110.67755"
+           cy="87.937439"
+           r="25.928276" />
+        <circle
+           style="fill:#000000;stroke:none;stroke-width:0.529;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path846-9-1"
+           cx="116.99774"
+           cy="80.755775"
+           r="9.7214146" />
+        <path
+           id="path1230"
+           style="fill:#ffd42a;stroke:none;stroke-width:0.638;stroke-miterlimit:4;stroke-dasharray:none"
+           inkscape:transform-center-x="-2.9363784"
+           inkscape:transform-center-y="-3.0135587"
+           d="m 146.09726,69.342919 a 68.327605,68.327605 0 0 1 1.84383,15.762345 68.327605,68.327605 0 0 1 -8.08736,32.134476 c -0.0462,0.19225 -0.0911,0.38238 -0.13798,0.57568 l 46.022,-11.53263 -31.91743,-11.26702 33.74625,-2.621547 z" />
+      </g>
+    </g>
+    <g
+       id="g55416">
+      <g
+         id="g53157"
+         transform="translate(0,-16.756014)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="312.87167"
+           y="-136.11592"
+           id="text12721"><tspan
+             sodipodi:role="line"
+             id="tspan12719"
+             style="stroke-width:0.264583"
+             x="312.87167"
+             y="-136.11592">Emacs users</tspan></text>
+        <rect
+           style="fill:#6046a1;fill-opacity:1;stroke:#000000;stroke-width:0.638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect47388"
+           width="14.196613"
+           height="14.196613"
+           x="287.16653"
+           y="-146.99693" />
+      </g>
+      <g
+         id="g53162"
+         transform="translate(0,-14.546301)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="312.87167"
+           y="-114.23665"
+           id="text15299"><tspan
+             sodipodi:role="line"
+             id="tspan15297"
+             style="stroke-width:0.264583"
+             x="312.87167"
+             y="-114.23665">Emacs + org-mode users</tspan></text>
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect47388-1"
+           width="14.196613"
+           height="14.196613"
+           x="287.16653"
+           y="-124.25466" />
+      </g>
+      <g
+         id="g53152"
+         transform="translate(0,-9.2310009)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="313.0112"
+           y="-169.47943"
+           id="text3705"><tspan
+             sodipodi:role="line"
+             id="tspan3703"
+             style="stroke-width:0.264583"
+             x="313.0112"
+             y="-169.47943">users of documentation tools</tspan></text>
+        <rect
+           style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect47388-1-0"
+           width="14.196613"
+           height="14.196613"
+           x="287.16653"
+           y="-179.47392" />
+      </g>
+      <g
+         id="g55394">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="312.87167"
+           y="-77.853218"
+           id="text17763-1"><tspan
+             sodipodi:role="line"
+             id="tspan17761-7"
+             style="stroke-width:0.264583"
+             x="312.87167"
+             y="-77.853218">beak</tspan></text>
+        <rect
+           style="fill:#ffd42a;fill-opacity:1;stroke:#000000;stroke-width:0.638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect47388-1-17"
+           width="14.196613"
+           height="14.196613"
+           x="287.16653"
+           y="-88.897011" />
+      </g>
+      <g
+         id="g53167"
+         transform="translate(0,-12.336997)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="312.87167"
+           y="-90.468193"
+           id="text17763"><tspan
+             sodipodi:role="line"
+             id="tspan17761"
+             style="stroke-width:0.264583"
+             x="312.87167"
+             y="-90.468193">Howard Abrams</tspan></text>
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect47388-1-1"
+           width="14.196613"
+           height="14.196613"
+           x="287.16653"
+           y="-101.51199" />
+      </g>
+    </g>
+  </g>
+</svg>

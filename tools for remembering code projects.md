@@ -89,7 +89,7 @@ To really make the log file useful, you need to have discipline: clean it up dil
 
 Working with `org-mode` in Emacs means it only takes a few keystrokes to run a command and capture its output in the same file. This addresses the pain point of having to remember to record the contents and outputs of important commands. As a result, all my documentation was in org-mode for a time. Filtering files in bash, saving the results to a variable, and processing the result in python, then plotting the output in R, all in the same file, is a magical feeling.
 
-[![asciicast](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE.png)](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE)
+[![asciicast](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE.svg)](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE)
 
 To see org used effectively, see the demonstration in [literate devops with Emacs](http://howardism.org/Technical/Emacs/literate-devops.html) by Howard Abrams. As impressive as it is, I don't recommend this approach.
 
@@ -97,7 +97,7 @@ The two main problems, in practice:
 1. most people don't use Emacs
 2. among people who use Emacs, less are proficient in org-mode, and of those who are proficient, less are as proficient as Howard.
 
-![[img/2022/01/emacs-users-diagram.svg]]
+![emacs proficiency diagram](./img/2022/01/emacs-users-diagram.svg)
 
 We can easily export org files into nicely-typesetted, syntax highlighted, publication-quality documents, but the exported files, be them HTML or PDF documents, are optimized for archival and consumption, not interaction and modification. The moment you send an export to a colleague, you'll see them extending it in the company-sanctioned WYSIWYG editor, leading to cosmic visual torture of code blocks in Sans-Serif font. The moment you send the original org source to a colleague, you'll hear them converting it to their favorite flavor of markdown, and you wonder why you didn't just send the output of `org-md-export-to-markdown` (but the voice on your shoulder whispers _just use markdown_).
 
