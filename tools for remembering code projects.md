@@ -1,4 +1,4 @@
-Tools for remembering code projects
+How did I run that code again? Tools to help recall
 ===
 
 If there is one thing I'm really really good at, it's being unable to remember things. I often struggle to recall the name of the store I visited last week, the file I edited yesterday[^find-command], or the browser tab I re-opened minutes ago. Unfortunately, I still don't have real solutions to these challenges, but for code and programs, here are some tricks and tools for reminding myself what I need to know. Note that these codes and programs are usually contained in code projects, so you can consider this a subset of "personal knowledge management", whose discussion is unfortunately in a different castle.
@@ -45,7 +45,7 @@ Still here? Prize! 🎉🎉🎉
 
 Since many projects are initialized with a README now, it seems natural to also put "how to run this" in there. It also seems like the least effective method: READMEs usually describe static or slow-changing information, such that for projects in flux, they undergo factuo-active decay. You might be a disciple of discipline and decide to "be disciplined" about disciplining the README.
 
-That would certainly set a bar for quality. So the "README" name carries weight and I don't expect to see a memories of better days dumped in there. So before committing a README change you'd want to send it through the spell check, grammar check, grandma check, blank check, focus groups, legal, HR, subscribe like follow me on Twitstagram and all that. Soon, the mental red tape seeps into your subconscious, and past promises of the README asynchronously decay into future falsehoods.
+That would certainly set a bar for quality. So the "README" name carries weight and I don't expect to see memories of better days dumped in there. So before committing a README change you'd want to send it through the spell check, grammar check, grandma check, blank check, focus groups, legal, HR, subscribe like follow me on Twitstagram and all that. Soon, the mental red tape seeps into your subconscious, and past promises of the README asynchronously decay into future falsehoods.
 
 ## the run log
 
@@ -54,11 +54,11 @@ So now your README is Truth but minimal, and doesn't list all the possible comma
 [^aws-cli-subcommands]: interestingly, getting this number was not as straightforward as I expected, because `aws help` [prints funny stuff](https://github.com/aws/aws-cli/issues/5455). So ultimately, this is what I ended up with:
 	```sh
 	aws --no-paginate help                # spit non-paginated help (else your pipe gets no output)
-      | col -b                            # remove all control characters except the final column
+	  | col -b                            # remove all control characters except the final column
 	  | sed -e '1,/AVAILABLE SERVICES/d'  # remove all lines up until and including `AVAILABLE SERVICES`
 	  | sed '/SEE ALSO/Q'                 # remove all lines including and after `SEE ALSO`
 	  | grep ' o '                        # keep lines with ' o ' marker
-      | wc -l                             # count lines
+	  | wc -l                             # count lines
     ```
 
 For shell interaction, sometimes I use a run log: run some commands, check the output, and if everything looked good, copy-paste everything into a file called `run.log` in the project directory. I still do this when no tools are available. [^shell-recording-tools] I also know big-head people who just review `history`, but since I can't remember context, I prefer to record as I go.
@@ -117,11 +117,11 @@ That said, there are still some situations where org-mode can be the best tool a
 	- I wrote [ob-shstream](https://github.com/whacked/ob-shstream) for working with asynchronous / long-running processes, but all things considered, there are better methods.
 - code block line numbers don't match line error messages
 - commands with massive output or long lines can cripple Emacs
-- remoting requires configuring the remote shell, special header directives in shell blocks, running a separate shell process (`M-x shell` or maybe `vterm`, as separate challenge), and various other things you figure out on a Saturday afternoon when you realize maybe you've really gone too far. But wait, it looks pretty close, just one more fix!
+- remoting requires configuring the remote shell, special header directives in shell blocks, running a separate shell process (`M-x shell` or maybe `vterm`, as a separate challenge), and various other things you figure out on a Saturday afternoon when you realize maybe you've really gone too far. But wait, it looks pretty close, just one more fix!
 
 ## jupyter notebooks
 
-Circa 2017, IPython notebooks started replacing Emacs for a lot of my executable documentation. The [bash kernel](https://github.com/takluyver/bash_kernel) addresses most of the problems with command and output management for shell scripts, including those with long-running processes and large output. I using [ein](https://github.com/millejoh/emacs-ipython-notebook) to stay in Emacs + org-mode, but in the end, server + browser remains the easiest to remember.
+Circa 2017, IPython notebooks started replacing Emacs for a lot of my executable documentation. The [bash kernel](https://github.com/takluyver/bash_kernel) addresses most of the problems with command and output management for shell scripts, including those with long-running processes and large output. I tried [ein](https://github.com/millejoh/emacs-ipython-notebook) for staying in Emacs + org-mode, but in the end, server + browser remains the easiest to remember.
 
 IPython and Jupyter are excellent tools that have changed the industry; the great features of notebooks are widely covered elsewhere, so I will focus on limitations, particularly as they relate to a system for remembering how to execute code and programs within a project.
 
@@ -267,7 +267,7 @@ If you have a bunch of Node projects that follow a similar base dependency struc
 [^why-not-dry-dry]: `dry` is a package designed specifically to address `package.json` composability, and on paper, addresses the _copy paste madness_ that emerges across co-evolving projects. It introduces new syntax, files, and commands specifically for managing the package file, but composability is a problem more fundamental than the format or language, such that being an npm package looks like a drawback. Several other tools that directly attack the problem of composable data are much more attractive in comparison. They also play well with other programs in the shell, and have fast, pre-compiled, multi-platform binaries.
 
 - Jsonnet is a strict superset of JSON, which allows low-friction ease-in (as TypeScript does for JavaScript)
-- like the `Go` programming language, it comes with an official syntax formatter, which works excellently in [Vim](https://github.com/google/vim-jsonnet), and more regular syntax (like trailing commas, which leads to cleaner diffs)
+- like the `Go` programming language, it comes with an official syntax formatter, which works [excellently in Vim](https://github.com/google/vim-jsonnet), and more regular syntax (like trailing commas, which leads to cleaner diffs)
 - loose importing means any jsonnet file can inherit from any other jsonnet/json file, which makes setting up composition very easy
 - straightforward [bindings for several popular languages](https://jsonnet.org/ref/bindings.html) including python and Node
 
@@ -326,7 +326,7 @@ jsonnet package.jsonnet | jq | tee package.json
 }
 ```
 
-[^jsonnet-quirks]: due to an odd quirk of jsonnet [producing 3-space-indented JSON](https://github.com/google/jsonnet/issues/547), such that I almost always pipe the output through `jq` for re-indentation.
+[^jsonnet-quirks]: due to an odd quirk of jsonnet [producing 3-space-indented JSON](https://github.com/google/jsonnet/issues/547), I almost always pipe the output through `jq` for re-indentation.
 
 This automates syncing the package information in one direction, but if we run an `npm install` or `yarn add` in the satellite project, syncing back upstream becomes a separate problem. But before any of that: how do I remember to run `make` at all? Ideally, I would enter the project, and the project will tell me.
 
@@ -393,7 +393,7 @@ in pkgs.mkShell {
   buildInputs = [
     pkgs.jq
     pkgs.nodejs
-	pkgs.pastel
+    pkgs.pastel
   ]
   ++ webserver.buildInputs
   ;
@@ -404,7 +404,7 @@ in pkgs.mkShell {
 
   shellHook =
     ''
-	pastel paint -n cyan "INFO "
+    pastel paint -n cyan "INFO "
     echo "including shell env from ${webserver.name}"
     ''
     + webserver.shellHook + ''
@@ -412,7 +412,7 @@ in pkgs.mkShell {
     if (which shadow-cljs &> /dev/null); then
         echo "shadow-cljs is in $(which shadow-cljs)"
     else
-	    pastel paint -n white --on magenta "setting up a new shadow-cljs environment"
+        pastel paint -n white --on magenta "setting up a new shadow-cljs environment"
         npm install shadow-cljs react create-react-class react-dom
     fi
 
@@ -424,7 +424,7 @@ in pkgs.mkShell {
     alias dev='npm run dev'
     alias release='npm run release'
     alias pull-data='python pull_data.py'
-	
+    
     echo-shortcuts ${__curPos.file}
   '';
 }
@@ -510,21 +510,21 @@ It's a simple thing, and depending on the framework, this is a [solved](https://
 	```python
 	@app.route('/help')
 	def show_route_list():
-		from flask import render_template_string
-		route_list = []
-		for rule in app.url_map.iter_rules():
-			if rule.endpoint != 'static' and '<' not in rule.rule:
-				route_list.append((rule.rule, app.view_functions[rule.endpoint].__doc__ or ''))
-		route_list.sort()
-		return render_template_string('''
-		<ol>
-		{% for rule, doc in route_list %}
-		<li>
-			<a href="{{ rule }}">{{ rule }}</a> :: {{ doc }}
-		</li>
-		{% endfor %}
-		</ol>
-		''', route_list=route_list)
+	    from flask import render_template_string
+	    route_list = []
+	    for rule in app.url_map.iter_rules():
+	        if rule.endpoint != 'static' and '<' not in rule.rule:
+	           route_list.append((rule.rule, app.view_functions[rule.endpoint].__doc__ or ''))
+	    route_list.sort()
+	    return render_template_string('''
+	    <ol>
+	    {% for rule, doc in route_list %}
+	    <li>
+	        <a href="{{ rule }}">{{ rule }}</a> :: {{ doc }}
+	    </li>
+	    {% endfor %}
+	    </ol>
+	    ''', route_list=route_list)
 	```
 	in `express`
 	```javascript
@@ -532,15 +532,15 @@ It's a simple thing, and depending on the framework, this is a [solved](https://
 	  let ol: Array<any> = ["ol"]
 	  expressApp._router.stack.forEach((layer) => {
 	    if (!isEmpty(layer.route)) {
-	  	let li = ["li",
-	  	  ["div",
-	  		["a", { href: layer.route.path }, ["code", layer.route.path]],
-	  		Object.keys(layer.route.methods != null ? layer.route.methods : {}).map(
-	  		  method => ["code", method]
-	  		),
-	  	  ]
-	  	]
-	  	ol.push(li)
+	      let li = ["li",
+	        ["div",
+	          ["a", { href: layer.route.path }, ["code", layer.route.path]],
+	          Object.keys(layer.route.methods != null ? layer.route.methods : {}).map(
+	            method => ["code", method]
+	          ),
+	        ]
+	      ]
+	      ol.push(li)
 	    }
 	  })
 	  return respondHiccup(res, ["body", ol])
