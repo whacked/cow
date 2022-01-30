@@ -37,7 +37,7 @@ For projects, what we need is a foolproof guide to put us in the correct state w
 
 These days, many frameworks have scaffolding commands, like `npx create-next-app my-nuxt-app`, `lein new app my-boot-app`, `rails new my-sinatra-app`, that generate a runnable project skeleton. They also generate README files, but don't record _how_ the project was created (try `lein new luminus my-project +aleph +http-kit +h2 +sqlite +shadow-cljs +war +auth`). So the first thing I do is record the command somewhere. When revisiting a shelved project, the underlying framework versions and template commands may have changed, so it is important to record how the world appeared out of nowhere.
 
-It's also sensible to add the genesis command into a git commit, but sometimes I am so clever and write something like `initial commit`. Sometimes I make modifications before commiting, maybe because I'm following a guide, I cloned a sample repo, or because the generator creates junk I don't want in the commit: multi-platform scripts, unusued database seed files, sample files with 🎉 emojis congratulating me in understanding instructions (everything is so complicated now, it's important to reward every step). If I forgot to commit the genesis command, I'd want to stuff it in a README or another text file.
+It's also sensible to add the genesis command into a git commit, but sometimes I am so clever and write something like `initial commit`. Sometimes I make modifications before committing, maybe because I'm following a guide, I cloned a sample repo, or because the generator creates junk I don't want in the commit: multi-platform scripts, unused database seed files, sample files with 🎉 emojis congratulating me in understanding instructions (everything is so complicated now, it's important to reward every step). If I forgot to commit the genesis command, I'd want to stuff it in a README or another text file.
 
 Still here? Prize! 🎉🎉🎉
 
@@ -91,6 +91,46 @@ Working with `org-mode` in Emacs means it only takes a few keystrokes to run a c
 
 [![asciicast](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE.svg)](https://asciinema.org/a/BlN2izVoMJCtb83OzJTeFqMoE)
 
+
+<!--
+
+# -*- org-confirm-babel-evaluate: nil; org-babel-python-command: "nix-shell -p python39 python39Packages.pillow --run python"; org-babel-R-command: "nix-shell -p 'rWrapper.override{packages = [ rPackages.txtplot ];}' --run 'R --slave --no-save'" -*-
+# recorded with: asciinema rec -c 'emacsclient -c -nw mix.org' org-babel.cast
+
+
+#+name: sh_file
+#+begin_src sh :results output :cache yes
+  find /usr/ -type f | grep 'png$' | grep smile | grep 32x32 | tail -1
+#+end_src
+
+#+RESULTS[233d6abb00a61a378d03395ab4d887b787f672de]: sh_file
+: /usr/share/icons/Adwaita/32x32/legacy/face-smile.png
+
+#+name: py_rgb
+#+begin_src python :results table :var input_file=sh_file :cache yes
+  from PIL import Image
+  from collections import Counter
+
+  file_path = input_file.strip()
+  out = []
+  image = Image.open(file_path)
+  width, height = image.size
+  for x, y in [(x, y) for x in range(width) for y in range(height)]:
+      r, g, b, a = image.getpixel((x, y))
+      if (r + g + b) / 3.0 / 255 < 0.4:
+          out.append((x, y))
+
+  return out
+#+end_src
+
+#+begin_src R :results output :var d.image=py_rgb
+  library(txtplot)
+  names(d.image) <- c("x", "y")
+  txtplot(d.image$x, -d.image$y)
+#+end_src
+
+-->
+
 To see org used effectively, see the demonstration in [literate devops with Emacs](http://howardism.org/Technical/Emacs/literate-devops.html) by Howard Abrams. As impressive as it is, I don't recommend this approach.
 
 The two main problems, in practice:
@@ -110,7 +150,7 @@ Less impedance of tools means faster output. Markdown tooling has gotten so much
 That said, there are still some situations where org-mode can be the best tool at hand. For example, when HashiCorp's HCL didn't support composition, I used `noweb` in org-babel to maintain global resource constants, and tangled out updated `hcl` files for `terraform`. I then executed all `terraform` (with `-auto-approve`) commands from the org file with all outputs saved. It works best within a small, contained level of complexity, and a small number of brains.
 
 ### a few more limitations with Emacs + org-mode
-- for shell commands in babel, the first problem is syncronous evaluation. This isn't a bottleneck for simple commands, but for long-running commands, we quickly enter an engineering vortex.
+- for shell commands in babel, the first problem is synchronous evaluation. This isn't a bottleneck for simple commands, but for long-running commands, we quickly enter an engineering vortex.
 	- to un-block emacs, we need to run a separate process
 	- we want to see shell output as it appears
 	- we need to capture outputs back into org-mode
@@ -227,7 +267,7 @@ Did you mean this?
 
 Thanks for becoming more helpful!
 
-## `project.json`
+## `package.json`
 
 `npm`'s `scripts` is a nice feature for reminding how to Do The Things. It allows you to store essential commands into `package.json`:
 
@@ -258,7 +298,7 @@ $
 - no structured comments: this may be by design, but as a memory aid, it helps to have context
 - npm-native: doesn't make sense for non-node projects; otherwise, it creates temptation to stash management commands into the npm toolchain. If you have a Django backend with `django` management commands, you probably don't add django commands into `package.json`, so you still have to keep track of at least 2 command entrypoints: `npm run` and `python manage.py`.
 - package.json is [not designed for composability](https://github.com/npm/npm/issues/8112#issuecomment-192489694); 10 projects with the same `npm run X` command would have 10 identical `"scripts": { "X": "same special command" }` entries. If I update `special command`, I would need to remember to update 9 other projects (I won't).
-- `package.json` is now a kitchensink metadata file, containing dependencies, to delcarations of [plugin](https://code.visualstudio.com/api/references/extension-manifest) [capabilities](https://flight-manual.atom.io/hacking-atom/sections/package-word-count/), to commands for testing and building. It's sensible in that it's all data _about the package_ -- but so is the README. In the end, the distinction seems to be `package.json` for electrons and README for neurons. Since neurons die but electrons live forever, we need better ways to make dryware assist the wetware.
+- `package.json` is now a kitchensink metadata file, containing dependencies, to declarations of [plugin](https://code.visualstudio.com/api/references/extension-manifest) [capabilities](https://flight-manual.atom.io/hacking-atom/sections/package-word-count/), to commands for testing and building. It's sensible in that it's all data _about the package_ -- but so is the README. In the end, the distinction seems to be `package.json` for electrons and README for neurons. Since neurons die but electrons live forever, we need better ways to make dryware assist the wetware.
 
 ### recollection bad? composition good!
 
@@ -271,7 +311,7 @@ If you have a bunch of Node projects that follow a similar base dependency struc
 - loose importing means any jsonnet file can inherit from any other jsonnet/json file, which makes setting up composition very easy
 - straightforward [bindings for several popular languages](https://jsonnet.org/ref/bindings.html) including python and Node
 
-As an example for package inheritence then, let's start with a shared package file:
+As an example for package inheritance then, let's start with a shared package file:
 
 ```
 $ cat super/package.jsonnet
@@ -460,7 +500,7 @@ EOF
 
 Then I add project package dependencies to `buildInputs`, shared scripts to `nativeBuildInputs`, and shared shell initializations into `shellHook`. This works for most projects I create or import.
 
-If you do this, you'll proably be using less than 5% of nix's functionality. But there aren't many tools where 5% functionality gives you something close to a superpower. [^high-leverage-tools] Just imagine how popular you'll be by trivially running 5 different postgreSQL servers!
+If you do this, you'll probably be using less than 5% of nix's functionality. But there aren't many tools where 5% functionality gives you something close to a superpower. [^high-leverage-tools] Just imagine how popular you'll be by trivially running 5 different postgreSQL servers!
 
 ```bash
 $ which postgres 
@@ -476,7 +516,7 @@ $
 
 Well, I certainly can say from experience, it doesn't make you popular at all. But if you're not popular anyway, why not pick up a superpower while you're at it?
 
-[^package-language]: to be fair, this is an artifact of being a package langauge, and [according to repology.org](https://repology.org/repositories/statistics), `nix_unstable` currently has over 60k packages, the highest of all repositories tracked
+[^package-language]: to be fair, this is an artifact of being a package language, and [according to repology.org](https://repology.org/repositories/statistics), `nix_unstable` currently has over 60k packages, the highest of all repositories tracked
 [^high-leverage-tools]: what else is there? smartphones? POSIX pipes? programming languages? spreadsheets?
 
 ### what if no pre-defined packages exist?
