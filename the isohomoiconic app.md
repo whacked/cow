@@ -168,14 +168,14 @@ This looks strikingly similar to the array syntax we used earlier for simplifyin
 ```clojure
 [:div.world,  ;; using the keyword notation, unify div.world
  {
-  :padding "1em
-  :border-radius "1em
+  :padding "1em"
+  :border-radius "1em"
   :background "#4C92CC"
   },
  [:h1,
   {
-   :padding "1em
-   :border-radius "1em
+   :padding "1em"
+   :border-radius "1em"
    :background "#FEDD7A"
    :border "4px solid #1D80C3"
    :color "#BE1D29"
@@ -272,7 +272,7 @@ Since this method of transformation acts on _pieces of the code_, we can perform
 
 # the catch
 
-To be honest, I wouldn't recommend this approach to most people, even though I think it is awesome 😆 dancing 🕺 hero 🦸 rainbow 🌈 donuts 🍩.
+To be honest, I wouldn't recommend this approach to most people, even though I think it is awesome dancing donuts.
 
 I mean, this is a _true_ implementation of the "isomorphic stack"! From WebGL in the browser to Kafka clients running in microservices, all in one language. And if you need scripts for the shell, Clojure's still [got you covered](https://github.com/babashka/babashka)! It's s-exprs all the way down!
 
