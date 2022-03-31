@@ -254,6 +254,46 @@ A vim-integrated setup is shown in this asciicast:
 
 The logic behind this flow is implemented in [this bilingual script](https://github.com/whacked/setup/blob/master/bash/package-jsonnet-composition.nix.sh), which can be sourced in a BASH-compatible shell or imported into a nix expression (see [this article](./nix%20shellHack.md) for an explanation of the bilingual construction); the required programs are declared in the line below `buildInputs`: pastel, gron, fswatch, icdiff, jsonnet, watchexec, vim with +terminal.
 
+# package management
+
+The most highly visible attempt at creating a package management solution for Jsonnet appears to be [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler), whose main binary is a short `jb` command. There are friend repositories such as [jsonnet-libs](https://github.com/jsonnet-libs/xtd) that specifically target distribution using `jb`, so it probably commands the most mindshare right now.
+
+`jsonnet-bundler` basically operates off the assumption that at run-time, you call `jsonnet` with the `--jpath` flag and specify the location of the `jb`-managed libraries, which defaults to `vendor`. So instead of running `jsonnet <path-to-file>`, you'd run `jsonnet --jpath vendor <path-to-file>` or equivalently, `jsonnet -J vendor <path-to-file>`.
+
+While you can override `jsonnet-bundler`'s default using the `--jsonnetpkg-home` flag, it operates in the style of e.g. `npm`, where it wants to put the vendor libraries and the package lockfile in the current directory of execution. There are pros and cons to this approach, but for my personal use, I am much more partial to the style of  maven, which pulls libraries from a centralized location on the system (usually `$HOME/.m2`).
+
+Another problem is that `jb` has expectations of how the `jb`-managed libraries are structured, which adds a level of annoyance when mixing "dumb" libraries like one-off files. There's always the option of directly importing the external file by relative or absolute path, but now you have to context switch between external-and-jb-managed and external-but-not-jb-managed files.
+
+## massaging `JSONNET_PATH` to have it both ways
+
+By setting the `JSONNET_PATH` environment variable to include both `jb`-managed libraries at a centralized location, and installing other external files / repositories to the central location using the same structure, we can mix libraries easily.
+
+The method is encoded in this [nix-bash bilingual file](https://github.com/whacked/setup/blob/ffdfc4aeebf9573ba604e5280a802a5816609cb6/bash/jsonnet_shortcuts.sh). It supplies 2 functions, one that wraps `jb` so that it always installs to the central repository location, and another that wraps `git clone` so it installs non-jsonnet-bundler repositories to the central location using the same layout. Using these functions then, I would do
+
+```bash
+# for jsonnet-bundler style repos
+# instead of: jb install github.com/jsonnet-libs/xtd
+jsonnet-bundler-install github.com/jsonnet-libs/xtd
+
+# for other repos
+jsonnet-repo-install github.com/example/other-library
+
+```
+
+Then in my jsonnet file:
+
+```jsonnet
+// jsonnet-bundler
+local ascii = import 'github.com/jsonnet-libs/xtd/ascii.libsonnet'
+
+// non-jsonnet-bundler
+local otherLib = import 'github.com/example/other-library/templates/jsonschema.jsonnet'
+```
+
+Note that while `jsonnet-bundler` creates a symlink within the `--jsonnetpkg-home` directory so that you can import it using e.g. `import 'xtd'` above, I prefer to ignore it and use fully qualified paths both to keep consistency across `jb` and non-`jb` libraries, but also to signify that these are external imports.
+
+Another downside is that we completely ignore jsonnet-bundler's lockfile, which encodes the dependency tree. I have not found this to be a problem whatsoever, and I suspect that since jsonnet functions entirely in data space, the room for "spooky state changes at a distance" is greatly reduced, such that having the dependency tree is less important than having the _output schema_.
+
 # misc notes
 
 ## using language bindings
