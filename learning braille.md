@@ -27,7 +27,7 @@ Since Braille is an alphabet, it involves a foundational skill of decoding the i
 We are swapping out the blue inputs from the eye, with the reddish inputs from the finger. [^literature-on-tactile-input]
 [^literature-on-tactile-input]: [zotero:Brain activation related to the tactile perception of touching ridged texture using fingers](https://dx.doi.org/10.1111/srt.13122)
 
-The full mechanism is far more complex because unlike physical systems, neural systems rarely work in isolation. But as an engineering problem, we're basically replacing the webcam for the keyboard.
+The full mechanism is far more complex because unlike physical systems, neural systems rarely work in isolation. But as an engineering problem, we're basically replacing the webcam with the keyboard.
 
 # learning the alphabet
 
@@ -174,7 +174,7 @@ Total submission time averages on the nth-day (lower is better):
 
 ![](./img/2022/05/900-days-braille-tactile.svg)
 
-Green shows my revisit after 1 year, and red shows me revisiting the task over another year after that. I clearly slowed down, but more interestingly, sped up rapidly in successive sessions, matching previous levels. All these sessions are short: a few minutes per day.
+Green shows my revisit after 1 year (T+367 days), and red shows me revisiting the task more than year after that (T+812 days). I clearly slowed down, but more interestingly, sped up rapidly in successive sessions, matching previous levels. All these sessions are short: a few minutes per day.
 
 So uh, remember how teachers tell students to not procrastinate? This is the effect of not procrastinating.
 
