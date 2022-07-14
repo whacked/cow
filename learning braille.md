@@ -1,16 +1,13 @@
-#blog
-
-
 # what's written on matzos?
 
-Many years ago, I shared office space with a fascinating man named Mike. An elderly fellow with a long career in finance, every morning he would plop into his Aeron and spend the day making calls to his buddies, probably to arrange for them to give talks or join a new financial initiative. His hearing was poor, which was compensated by his booming voice. All the sound waves that missed his speakerphone simply spilled to the rest of the office. The students nearby got a kick from listening to him because of his no-shits-given attitude and dark humor. He would tell his friends: I have 3 children, each of them flawed in their own ways, but they have given me 6 grandchildren, each of them perfect -- grandchildren are God's way of telling you to not kill your children!
+Many years ago, I shared office space with a fascinating man named Mike. An elderly fellow with a long career in finance, every morning he would plop into his Aeron and spend the day making calls to his buddies, probably to invite them to give talks or join new financial initiatives. He had severe hearing loss, which he had transformed into gains of loudness in speaking. All the sound waves that missed his speakerphone simply spilled to the rest of the office. The students nearby got a kick from overhearing his conversations because of his no-shits-given attitude and dark humor. He would tell his friends: I have 3 children, each of them flawed in their own ways, but they have given me 6 grandchildren, each of them perfect -- grandchildren are God's way of telling you to not kill your children!
 
 One day I overheard him telling a joke: at lunchtime during Passover, a Jewish man spots a blind Jewish man sitting at a park. Thinking that the Passover meal is better with company, he sits next to the blind fellow and offers a sheet of matzo. The blind man holds the matzo in silence for a moment, then exclaims, "who wrote this crap?"
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Matzot_Ren%C3%A9_Neymann_Wasselonne_avril_2014.jpg/1024px-Matzot_Ren%C3%A9_Neymann_Wasselonne_avril_2014.jpg)
 source: https://en.wikipedia.org/wiki/Matzo#/media/File:Matzot_Ren%C3%A9_Neymann_Wasselonne_avril_2014.jpg
 
-Maybe hearing Mike's joke planted the seeds, but in 2019, I decided to learn Braille. Some people asked if I'm losing my eyesight. My eyes aren't great, but they're still functional.
+Maybe hearing Mike's joke planted the seeds, but in 2019, I decided to learn ~~how to read matzos~~ Braille. Some people asked if I'm losing my eyesight. My eyes aren't great, but they're still functional.
 
 Of the five major sensory modalities, most people are familiar with auditory (spoken) and visual (printed) communication. Learning to read braille is one of the few methods of verbal communication readily learnable today, which immediately loads a new (tactile) sensory channel. A fascinating exercise of plasticity!
 
@@ -20,22 +17,21 @@ Yes, #DoItForThePlasticity [^learning-asl]
 
 # the approach
 
-Since Braille is an alphabet, it involves a foundational skill of reading the individual characters, which then connects with a complex skill of perceiving words and sentences. In sighted reading, signals are transmitted through the optic nerve into the visual cortex, which then spreads into higher cortical areas for further processing, leading to comprehension. When reading in Braille, we are effectively swapping out the visual modality _input_ into the visual cortex, using the tactile modality input, into the motor cortex. Neuro-architecturally, it looks like this:
+Since Braille is an alphabet, it involves a foundational skill of decoding the individual characters, which then connects with a complex skill of integration and comprehension of words and sentences. In sighted reading, signals are transmitted through the optic nerve into the visual cortex, which then spreads into higher cortical areas for further processing, leading to comprehension. When reading in Braille, we are effectively swapping out the _visual modality input_ into the visual cortex, with the _tactile modality input_ into the motor cortex. Neuro-architecturally, it looks like this:
 
 ![](./img/2022/05/2022-05-29_replacing-inputs.png)
 (crudely overlayed on figure from Dahaene 2009). See https://readinginthebrain.pagesperso-orange.fr/ for original figure and additional information on the visual pathway.
 
-We are swapping out the blue inputs from the eye, with the reddish inputs from the finger.
-
-[zotero:Brain activation related to the tactile perception of touching ridged texture using fingers](https://dx.doi.org/10.1111/srt.13122)
+We are swapping out the blue inputs from the eye, with the reddish inputs from the finger. [^literature-on-tactile-input]
+[literature-on-tactile-input]: [zotero:Brain activation related to the tactile perception of touching ridged texture using fingers](https://dx.doi.org/10.1111/srt.13122)
 
 The full mechanism is far more complex because unlike physical systems, neural systems rarely work in isolation. But as an engineering problem, we're basically replacing the webcam for the keyboard.
 
 # learning the alphabet
 
-FIrst I need to remember all the Braille characters. This is a run-of-the-mill _paired associates_ memory task. I wrote a simple program that shows me the Braille character, prompting me to input the corresponding English alphabet.
+First I need to remember all the Braille characters. This is a run-of-the-mill _paired associates_ memory task. I wrote a simple program that shows me the Braille character, prompting me to input the corresponding English alphabet.
 
-![[../assets/braille-pa-screenshot.png]]
+![](./img/2022/05/braille-pa-screenshot.png)
 It's quite so fisticated and bluetiful, but I type `u` here because the answer is u.
 
 The learning trajectory of paired associates over time:
