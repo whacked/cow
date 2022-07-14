@@ -22,7 +22,7 @@ Yes, #DoItForThePlasticity [^learning-asl]
 
 Since Braille is an alphabet, it involves a foundational skill of reading the individual characters, which then connects with a complex skill of perceiving words and sentences. In sighted reading, signals are transmitted through the optic nerve into the visual cortex, which then spreads into higher cortical areas for further processing, leading to comprehension. When reading in Braille, we are effectively swapping out the visual modality _input_ into the visual cortex, using the tactile modality input, into the motor cortex. Neuro-architecturally, it looks like this:
 
-![[../assets/2022-05-29_replacing-inputs.png]]
+![](./img/2022/05/2022-05-29_replacing-inputs.png)
 (crudely overlayed on figure from Dahaene 2009). See https://readinginthebrain.pagesperso-orange.fr/ for original figure and additional information on the visual pathway.
 
 We are swapping out the blue inputs from the eye, with the reddish inputs from the finger.
