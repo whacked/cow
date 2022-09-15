@@ -39,7 +39,7 @@ There are plenty of known cases of people who attained exceptional calculation a
 
 ## Rüdiger Gamm
 
-One of the more recent and publicly recorded instances was that of [Rüdiger Gamm](https://en.wikipedia.org/wiki/R%C3%BCdiger_Gamm), who competed on television against Hiroaki Tsuchiya, a meijin [^tsuchiya-hiroaki] soroban expert. [Rudiger Gamm vs. Hiroaki Tsuchiya](https://youtu.be/68yGYvMxQKI?t=73)
+One of the more recent and publicly recorded instances was that of [Rüdiger Gamm](https://en.wikipedia.org/wiki/R%C3%BCdiger_Gamm), who competed on television against Hiroaki Tsuchiya, a meijin [^tsuchiya-hiroaki] soroban expert. Rudiger Gamm vs. Hiroaki Tsuchiya: https://youtu.be/68yGYvMxQKI?t=73
 
 [^tsuchiya-hiroaki]: 土屋宏明 https://www.shuzan.jp/kyougikai/kekka/meijin15/
 [^meijin-competition]: https://ja.wikipedia.org/wiki/%E7%8F%A0%E7%AE%97%E5%90%8D%E4%BA%BA%E4%BD%8D%E6%B1%BA%E5%AE%9A%E6%88%A6 example: https://www.youtube.com/watch?v=EztExEiphFo around 59s, this video also demonstrates one of the competition items, "伝票算", which translates to "voucher calculation". Since it involves actually flipping through sheets of vouchers, there is an additional component of physical dexterity, which has nothing to do with numbers. Nevertheless, the overall speed of calculation is still astoundingly fast for humans.
@@ -77,7 +77,7 @@ Exceptionally good practitioners are able to compete for a "Meijin" title [^meij
 
 # Learning the soroban's language
 
-One of the components of mental calculation by abacus is developing the ability to visualize an abacus in the mind's eye, or as Kasai explained, an "abacus in your head". But what does that mean exactly? Many people have trouble remembering the direction of Twitter's bird; how about 50 bean positions on the abacus? I assume it will be something like blindfold chess, but instead of picturing a chess board, you picture an abacus.
+One of the components of mental calculation by abacus is developing the ability to visualize an abacus in the mind's eye, or as Kasai explained, an "abacus in your head". But what does that mean exactly? Many people have trouble remembering the direction of Twitter's bird; how about 50 bead positions on the abacus? I assume it will be something like blindfold chess, but instead of picturing a chess board, you picture an abacus.
 
 ## how can people remember so many positions?
 
@@ -199,6 +199,16 @@ On the soroban, multiplication involves a slightly modified order of repeated ad
 
 Also, 3-digit mitorizan is particularly interesting, because it encompasses all possible 2-digit add/subtract operations, which makes it the smallest operand size that tests multiple carry operations (if we only have 2 digits, we can perform at most 1 carry). I suspect that with enough data, longitudinal performance on 3-digit mitorizan can be predictive of potential performance on higher digit operations.
 
+## chunking effects
+
+To get a sense of the rate of "chunk formation", we look at operands that involve carry / borrow operations that have a standard sequence of operations. Taking only trials where I correctly followed the standard sequence, we can get a sense of chunking by examining the time-per-operation over the months of practice:
+
+![](./img/2022/09/soroban-kuriagari-kurisagari-chunking-1.png)
+
+So in the case of the carry / borrow operations, it appears that 2 months is a reasonable time for "solid chunk formation". But note that this duration coincides with general fluency improvement, such that any emergent chunking is really one part of a larger, gradual process of automatization.
+
+In relevance to rapid mental calculation though, intuitively having larger operation chunks should be helpful. Such chunking has been observed in experts ([Tanaka et al, 2002](https://dx.doi.org/10.1097/00001756-200212030-00005)), but since generating operation chunks of mitorizan at 2 digits already means 100 x 100 = 10000 facts, to truly internalize all the 2 digit operations (and possibly beyond) requires a massive time investment (with an early start), and/or a massive memory.
+
 ## the cold-start effect
 
 Often times in repeated trials studies, we can observe speed-up in task performance over time, as people "oil their gears" to the task. Here, we can also observe that the first problem appears to have a longer average time per operation:
@@ -252,7 +262,7 @@ Here's a crude visualization of the response time data based on the number of vi
 From the data, it appears that
 1. I have not reached peak performance
 2. the time cost jumped a lot from 1 operand to 2 operands, but not from 2 to 5 operands
-3. this _hints_ at a more fundamental modality change of the 2nd operation onward as being fully "in the mind"
+3. this _hints_ at a more fundamental modality change of the 2nd operand onward as being fully "in the mind"
 
 Regardless, I realized that being able to see an abacus _at all_ makes the task significantly easier, so finally, we shift to something that hides the abacus until the answer phase.
 
@@ -266,7 +276,7 @@ Hopefully after a few more months, I'll have more improvement data.
 
 # Recap of the journey, 1 year in
 
-## did I learn operate a mental abacus?
+## did I learn to operate a mental abacus?
 
 Yes, albeit weakly.
 
@@ -278,15 +288,9 @@ Yes; not the practicing per se, but the grind, and facing my limits in the form 
 
 I don't _have to_. I can rely on visualizing the bead movements alone. However, at my level of proficiency, having an extra modality definitely helps keep track of the beads. I easily lose track of beads after carry, and having the memory trace of moving virtual beads with my fingers helps recall the configuration.
 
-## did I observe any interesting progression of chunking?
-
-Not really -- although I definitely achieved fluency of operations, the process is highly gradual and incremental, which simply evidences the chunking process as something that happens automatically behind the scenes, through sustained practice.
-
-Note that chunking has been observed in experts ([Tanaka et al, 2002](https://dx.doi.org/10.1097/00001756-200212030-00005)), but since generating operation chunks of mitorizan at 2 digits already means 100 x 100 = 10000 facts, to truly internalize all the 2 digit operations (and possibly beyond) requires a massive time investment (with an early start), and/or a massive memory.
-
 ## do I feel any sense of transfer learning?
 
-No, but this is unsurprising. I can draw parallels to one kind of skill that many more people can relate to: Tetris [^tetris-transfer-learning]. Millions of people have played Tetris, and enough people have played it to a degree where they can visualize an active game of Tetris to a high degree; the phenomenon has been documented to the point where it has a dedicated name: the [Tetris Effect](https://en.wikipedia.org/wiki/Tetris_effect). In my experience, soroban operation is quite similar, where I can visualize and operate a virtual soroban in my mind. It feels like a puzzle game, albeit one with no uncertainty and less degrees of freedom. The practical difference is that each configuration of the soroban maps uniquely to a number, such that it serves as a "numeric scratchpad".
+No, but this is unsurprising. I can draw parallels to one kind of skill that many more people can relate to: Tetris [^tetris-transfer-learning]. Millions of people have played Tetris, and enough people have played it to a level where they can visualize an active game of Tetris to a high degree; the phenomenon has been documented to the point where it has a dedicated name: the [Tetris Effect](https://en.wikipedia.org/wiki/Tetris_effect). In my experience, soroban operation is quite similar, where I can visualize and operate a virtual soroban in my mind. It feels like a puzzle game, albeit one with no uncertainty and less degrees of freedom. The practical difference is that each configuration of the soroban maps uniquely to a number, such that it serves as a "numeric scratchpad".
 
 [^tetris-transfer-learning]: by the way, does Tetris help people pack things better? Maybe! But I didn't see a study on that
 
@@ -345,10 +349,10 @@ During anzan, this is the one place that trips me the most.
 
 Often after a carry/borrow operation, I would forget the state of the 5-bead.
 
-## journal
+## learning journal
 
 ### 2021-10-13 01:07:16+08:00
-moving operand numbers be closer in the UI is very helpful.
+moving operand numbers to be closer in the UI is very helpful.
 alleviates other mental task tracking burden.
 
 ### 2021-11-06 23:51:10+08:00
