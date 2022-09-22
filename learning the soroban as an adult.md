@@ -1,3 +1,10 @@
+
+<details>
+<summary>
+I was introduced to the soroban in the 4th grade, but never practiced it to fluency.
+</summary>
+<div class="markdown">
+
 # So-rob-an abacus
 
 During the 90s, the Ministry of Education in Taiwan thought it would be useful to teach students how to use the [abacus](https://en.wikipedia.org/wiki/Soroban) [^chen-2008], so it was included as part of the standard mathematics curriculum [^abacus-in-textbook] [^abacus-influence].
@@ -17,6 +24,15 @@ At any rate, as one of those students, I also bought an abacus and spent a few c
 
 Now, while we can agree that math education is important, _calculation_ is just one kind of brick in a castle: foundational, but vanishes in the grand structure. To me, superhuman calculation ability never looked that useful beyond the spectacle. But the mystery remains, in the same way the "runner's high" is a mystery to me: I can only rely on translations by people who claim to experience it.
 
+</div>
+</details>
+
+<details>
+<summary>
+In Japan, soroban skill is still featured in mainstream media.
+</summary>
+<div class="markdown">
+
 # The soroban (Japanese abacus) in the 21st century
 
 Years ago, a popular Japanese comedy host featured a group of absurdly talented students from Tokyo University, known to be Japan's premier university [^sanma-no-show]. One student, Kasai Yumi, being able to solve 38 out of 40 problems like the ones below within 3 minutes, received a _10-dan_ (the highest) mental arithmetic rating when she was in 4th grade:
@@ -32,6 +48,15 @@ She explains, by moving her hands, she can calculate the problems. "There's an a
 Incidentally, while this show is mostly comedy, Kasai is listed as a 2-time gold medalist at the China Girls Math Olympiad [^kasai-yumi] so her mathematical prowess goes beyond fast calculation.
 
 [^kasai-yumi]: https://www.imojp.org/archive/laureler/cgmo/record_cgmo.html and https://baike.baidu.hk/item/%E4%B8%AD%E5%9C%8B%E5%A5%B3%E5%AD%90%E6%95%B8%E5%AD%B8%E5%A5%A7%E6%9E%97%E5%8C%B9%E5%85%8B/1580877
+
+</div>
+</details>
+
+<details>
+<summary>
+Soroban skill is especially impressive because most humans are NOT naturally-wired for rapid calculation.
+</summary>
+<div class="markdown">
 
 # Tools vs talent
 
@@ -54,6 +79,15 @@ How does that work? At a high level, given that the brain size is fixed, the use
 
 [^among-other-regions]: this is a simplification; the whole story is probably still unclear
 
+</div>
+</details>
+
+<details>
+<summary>
+Expertise in calculation with a physical abacus can facilitate expertise in calculation with a mental abacus, where every 3 or 4 physical digits corresponds to 1 mental digit.
+</summary>
+<div class="markdown">
+
 # Connecting abacus expertise and mental calculation
 
 Based on information from The League of Japan Abacus Associations, there are 2 main types of exams of certification of abacus skill: `shuzan` (珠算, or _bead calculation_, where you operate an actual abacus) and `anzan` (暗算, or _invisible calculation_, where you operate a _mental abacus_). Based on the example problems listed from the [league's page](http://www.shuzan.jp/kentei/mihon/), at the 1-kyuu level,
@@ -74,6 +108,15 @@ Another type of anzan exam is `flash anzan`, which involves mental calculation d
 - #FlashAnzan a flash anzan competition: https://www.youtube.com/watch?v=gtHS9Yovy5A showing 3-digit numbers presented at a rate of 5 numbers per second.
 
 Exceptionally good practitioners are able to compete for a "Meijin" title [^meijin-competition], which is something like a Grandmaster.
+
+</div>
+</details>
+
+<details>
+<summary>
+Large and rapid digit processing capacity is enabled by fluency with the soroban language and memory chunking.
+</summary>
+<div class="markdown">
 
 # Learning the soroban's language
 
@@ -100,6 +143,15 @@ There's going to be "hard for Grandmaster Carlsen right now", which is too hard 
 
 [^homo-techno]: credit to this interview https://youtu.be/KOwm7GUjcg8?t=5
 
+</div>
+</details>
+
+<details>
+<summary>
+The abacus is a good tool for the researching the learning process.
+</summary>
+<div class="markdown">
+
 # Abacus as a tool for research of learning
 
 In contrast to many other skill-heavy, practice-driven tasks, the soroban has several desirable traits as a tool for researching learning.
@@ -112,7 +164,16 @@ In contrast to many other skill-heavy, practice-driven tasks, the soroban has se
 
 recording data from learning the soroban may also give unique insight into the process of "chunking"
 
+</div>
+</details>
+
 # The setup
+
+<details>
+<summary>
+After considering a few different approaches, I decided to use a specialized keyboard to learn the abacus.
+</summary>
+<div class="markdown">
 
 ## choosing an interaction method
 
@@ -125,6 +186,11 @@ a touch screen app | once you try pushing bead graphics on glass, the difference
 a computer vision system with an actual abacus | I placed a soroban on top of a cardboard box. At the bottom of the box, I placed a cheap phone so I illuminate with its LED and read video from its camera. Then TensorFlow Lite... no wait, this can't be right. | No go 🛑 |
 a large keyboard | while each column on a soroban can represent 10 states, there are actually only 5 possible operations: 1 operation for the top bead (go-dama), which flips its up/down state; 4 operations for the bottom 4 beads (ichi-dama), which moves the flipped bead up (and all beads above it up), or down (and all beads below it down). In other words, I need a keyboard with 5 rows of keys. It turns out that [Cherry](https://www.cherry-world.com/) has a point of sale keyboard that meets this criterion | Go! 🟢 |
 
+
+</div>
+</details>
+
+
 ## introducing the Cherry Soroban
 
 ### Cherry G86-63400
@@ -136,11 +202,13 @@ I purchased a [G86-63400](https://cherryamericas.com/cherry-g86-63400.html), and
 Cherry Designer
 </summary>
 
+<div class="markdown">
 ![](./img/2022/09/cherry-designer-1.png)
 
 ![](./img/2022/09/cherry-designer-2.png)
 
 ![](./img/2022/09/cherry-designer-3.png)
+</div>
 </details>
 
 ![](./img/2022/09/cherry-keyboard-1.jpg)
@@ -153,17 +221,41 @@ Then I wrote an app to recognize these digit-pairs as input commands to update t
 
 ![](./img/2022/09/soroban-app-1.png)
 
+
 ## finding a teacher
+
+<details>
+<summary>
+After getting no good responses in finding tutors locally, I found a tutor online.
+</summary>
+
+<div class="markdown">
 
 In Taiwan in the summer of 2021, the COVID situation seemed to be under control, so I thought it would be a good chance to find a teacher for in-person instruction. This turned out to be quite difficult, largely because most tutoring sources I found were for children. Two weeks later with no progress, Japanese Google brought me to [Cafetalk](https://cafetalk.com/), and within 2 days I had an appointment.
 
 During COVID, the teacher had already started working with students remotely. Through videoconferencing software, she would point the camera at her abacus to explain, and presumably students would do the same. In my case, since my soroban display was an app, I simply shared my screen, although the teacher was unable to check if I was following the suggested finger movements.
 
-In total, I had 5 1-on-1 lessons, and in those 5 lessons we covered basic movements, addition, subtraction, then multiplication and division. In the later lessons, the teacher would give some hints, or otherwise correct me when I was walking through some moves, but once you grasp the basic concepts, the rest is old-fashioned practice.
+<details>
+<summary>
+In total, I had 5 1-on-1 lessons.
+</summary>
+In those 5 lessons we covered basic movements, addition, subtraction, then multiplication and division. In the later lessons, the teacher would give some hints, or otherwise correct me when I was walking through some moves, but once you grasp the basic concepts, the rest is old-fashioned practice.
+</details>
+
+</div>
+</details>
+
 
 # The core knowledge
 
 For addition and subtraction, it turns out once you understand the "rule of friends" (complements), you understand _all_ the theory. Knowing how simple the theory is, it's very curious how that leads to doing crazy feats of mental arithmetic. That's what we're going to find out.
+
+
+<details>
+<summary>
+The rules of movement basically map calculation of complements to the abacus beads.
+</summary>
+<div class="markdown">
 
 ## the rules of "friends"
 
@@ -176,6 +268,8 @@ Probably because the majority of students are young children, the teacher introd
 	- if a sum increases from less than 10 to more than 10, subtract the friend and add 1 to the column to the left, e.g. 8 + 9 = subtract 1 (9's friend of 10) and add 1 to the column to the left, yielding (1 x 10) + 7 = 17 ![](./img/2022/09/soroban-friends-demo-8-plus-9.svg)
 	- if a sum decreases from more than 10 to less than 10, subtract 1 from the column and add its friend to the column to the right, e.g. 16 - 8 = subtract 1 from the left column and add 2 (8's friend of 10) to the right column, yielding (0 x 10) + 8  8 ![](./img/2022/09/soroban-friends-demo-16-minus-8.svg)
 - note that operations for sums crossing 10 (via friend of 10) may in-turn require operations for sums within 10 (via friend of 5) For example, for 7 + 6, first apply 6's friend of 5, then add 10: ![](./img/2022/09/soroban-friends-demo-7-plus-6.svg)
+</div>
+</details>
 
 # Phase 1: the path to automatization
 
