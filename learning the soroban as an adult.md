@@ -618,3 +618,7 @@ so if the digits are being flashed on screen, as long as you can complete the vi
 
 i think i'm mostly able to do the 2-keta soroban in a full visualization manner now
 but because the current design shows the initial soroban at all times, maybe it's a sufficient crutch. we will test after the flash anzan app is ready
+
+### 2022-09-26 00:27:04+08:00
+
+fastest record today, from being pretty focused, less mistakes (although 1 gohasan), keeping up the lookahead and not slowing down
