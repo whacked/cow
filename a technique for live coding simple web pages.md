@@ -60,14 +60,13 @@ if your HTML is from a file on disk, you can simply pipe it into websocat:
 cat your-file.html | websocat ws://localhost:9999
 ```
 
-the [bootleg](https://github.com/retrogradeorbit/bootleg) library allows us to use `hiccup` with [babashka](https://github.com/babashka/babashka) to push frames as an animation:
+We can use `hiccup` in [babashka](https://github.com/babashka/babashka) to push frames as an animation:
 
 ```clojure
 ;; mypage.bb.clj
-(require '[babashka.pods :as pods])
-(pods/load-pod 'retrogradeorbit/bootleg "0.1.9")
-(require '[pod.retrogradeorbit.bootleg.utils :as utils])
-(require '[babashka.process :as p :refer [process]])
+(ns mypage
+  (:require [babashka.process :as p :refer [process]]
+            [hiccup2.core :as h]))
 
 (defrecord Circle
     [radius
@@ -78,8 +77,8 @@ the [bootleg](https://github.com/retrogradeorbit/bootleg) library allows us to u
      ])
 
 (defn send-output! [payload number]
-  (if nil  ;; write files instead?
-    (spit (format "frame-%03d.svg" number) payload)
+  (if nil
+    (spit (format "out/%03d.svg" number) payload)
     (-> (process ['echo payload])
         (process '[websocat "ws://localhost:9999"]))))
 
@@ -92,7 +91,7 @@ the [bootleg](https://github.com/retrogradeorbit/bootleg) library allows us to u
                  (->Circle 20 "skyblue" 10 (* $width 0.4) 1.4 (* $height 0.3) 1.2)]
                 (->> (range 99)
                      (map (fn [_]
-                            (->Circle 15 "#cccccc" 15 (/ $width 20) (rand) (* (/ $height 20) 19) (rand))))))
+                            (->Circle 15 "#cccccc" 15 (* $width 0.05) (rand) (* $height 0.95) (rand))))))
       out-of-bounds? (fn [min-position max-position velocity position radius]
                        (or (and (< velocity 0) (< position (+ min-position radius)))
                            (and (> velocity 0) (< (- max-position radius) position))))]
@@ -113,7 +112,7 @@ the [bootleg](https://github.com/retrogradeorbit/bootleg) library allows us to u
                           :r radius
                           :fill-opacity 0.5
                           :fill color}])))]]
-          (utils/convert-to :html)
+          (h/html)
           (send-output! step))
       (recur (rest remain-steps)
              ;; next step's circles
