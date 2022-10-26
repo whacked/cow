@@ -84,7 +84,7 @@ How does that work? At a high level, given that the brain size is fixed, the use
 
 <details>
 <summary>
-Expertise in calculation with a physical abacus can facilitate expertise in calculation with a mental abacus, where every 3 or 4 physical digits corresponds to 1 mental digit.
+Expertise in calculation with a physical abacus can facilitate expertise in calculation with a mental abacus, where fluency with 3 or 4 physical digits corresponds to working memory for 1 mental digit.
 </summary>
 <div class="markdown">
 
@@ -148,7 +148,7 @@ There's going to be "hard for Grandmaster Carlsen right now", which is too hard 
 
 <details>
 <summary>
-The abacus is a good tool for the researching the learning process.
+The abacus is a good tool to study the learning process.
 </summary>
 <div class="markdown">
 
