@@ -47,7 +47,7 @@ this example contains the bare minimum logic of connecting to a websocket and up
 ## start websocat
 
 ```sh
-websocat -t ws-l:127.0.0.1:9999 broadcast:mirror: --exit-on-eof
+websocat --buffer-size 99999999 --text ws-l:127.0.0.1:9999 broadcast:mirror: --exit-on-eof
 ```
 
 once connected, whatever you send to port 9999 will get displayed in the browser
@@ -57,7 +57,7 @@ once connected, whatever you send to port 9999 will get displayed in the browser
 if your HTML is from a file on disk, you can simply pipe it into websocat:
 
 ```sh
-cat your-file.html | websocat ws://localhost:9999
+cat your-file.html | websocat ws://localhost:9999 --buffer-size 99999999
 ```
 
 We can use `hiccup` in [babashka](https://github.com/babashka/babashka) to push frames as an animation:
@@ -77,10 +77,10 @@ We can use `hiccup` in [babashka](https://github.com/babashka/babashka) to push 
      ])
 
 (defn send-output! [payload number]
-  (if nil
-    (spit (format "out/%03d.svg" number) payload)
-    (-> (process ['echo payload])
-        (process '[websocat "ws://localhost:9999"]))))
+  (if nil  ;; write to file instead?
+    (spit (format "frame-%03d.svg" number) payload)
+    (process ['websocat "ws://localhost:9999" "--buffer-size" 99999999]
+             {:in payload})))
 
 (let [$steps 333
       $width 900
@@ -136,7 +136,7 @@ We can use `hiccup` in [babashka](https://github.com/babashka/babashka) to push 
 the combined output above was generated using [svgasm](https://github.com/tomkwok/svgasm):
 
 ```sh
-svgasm -d 0.02 -i 99 frame-*.svg -o animated.svg 
+svgasm -d 0.02 -i 99 frame-*.svg -o animated.svg
 ```
 
 ## start watchexec and code away
