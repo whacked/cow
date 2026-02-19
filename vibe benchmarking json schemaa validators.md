@@ -10,7 +10,7 @@ _authored by a human_
 
 I like types... actually, types are ok.
 
-What I really like is knowing the shape of the data. When I jump into a function, set a breakpoint, or capture a packet, I first wnat to understand the landscape of the data in our enviornment; once we know what actors are on stage, I want to know what shapes they have. And once we have the shape -- in code or in data -- I like to have it in writing.
+What I really like is knowing the shape of the data. When I jump into a function, set a breakpoint, or capture a packet, I first want to understand the landscape of the data in our environment; once we know what actors are on stage, I want to know what shapes they have. And once we have the shape -- in code or in data -- I like to have it in writing.
 
 There are a handful of tools that sit above any specific business logic and let us define language-agnostic structure definitions. A few well known ones:
 - [protobufs](https://protobuf.dev/)
@@ -22,7 +22,7 @@ As you might have guessed, JSON Schema is my preferred tool.
 
 While several other languages have superior writing ergonomics and expressive power, it's hard to argue with JSON's ubiquity. And in most cases of dealing with simple tabular data, CSVs, unbig matrices, or RDBMS rows, we can express entities as JSON numeric or object arrays. So sometimes, I would start a project by defining JSON Schemas of the data I expect to work with, then use codegen tools to generate classes and interfaces for consumers of that data. This workflow isn't that interesting if you use protobufs, but for JSON schema, tooling is a bit more spread out. For Python, I use [datamodel-code-generator](https://datamodel-code-generator.koxudaxi.dev/) to get pydantic v2 classes; for Go I use [go-jsonschema](https://github.com/omissis/go-jsonschema) to get structs; for TypeScript there's [json2ts](https://github.com/GregorBiswanger/json2ts) to get plain interfaces or [quicktype](https://github.com/glideapps/quicktype) for classes.
 
-And since JSONL datasets are everwhere now, in addition to enforcing structure at the start of the implementation pipeline, we also want to validate data at the end -- after receiving data records. And if we're working in the shell, we'll be piping records to validators like we pipe JSON into `jq` or pipe text into `{rip,}grep`.
+And since JSONL datasets are everywhere now, in addition to enforcing structure at the start of the implementation pipeline, we also want to validate data at the end -- after receiving data records. And if we're working in the shell, we'll be piping records to validators like we pipe JSON into `jq` or pipe text into `{rip,}grep`.
 
 # what to vibenchmark
 
@@ -100,7 +100,7 @@ ChatGPT came back with some decent questions, largely related to the high level 
 > **Q1.1: Should the benchmark matrix include both schema validation (schema vs metaschema) and instance validation (data vs schema), or only instance validation?**
 >
 > > **Answer:** our goal is to take a bunch of different CLI tools that provide json schema validation facilities to answer:
->   - how to validate a json schema against a metaschema (we will need to find the json schema versions they all understand in common, and target the latest of those. we should leave the possiblity to ALSO benchmark different versions, but for simplicity, just target the common latest now. but that also means that the benchmark output table ALSO has the field for the version, except for our current benchmarks, we either hide that field, or every row will have the same value in the output)
+>   - how to validate a json schema against a metaschema (we will need to find the json schema versions they all understand in common, and target the latest of those. we should leave the possibility to ALSO benchmark different versions, but for simplicity, just target the common latest now. but that also means that the benchmark output table ALSO has the field for the version, except for our current benchmarks, we either hide that field, or every row will have the same value in the output)
 >   - oh yes, so our benchmark will show a breakdown of validation of the local schema against metaschema (plus how to do that -- the command) AND that of the local schema against the instance data
 >
 > **Q1.2: Which schema drafts do we care about initially (2020-12, 2019-09, draft-07, draft-04)?**
@@ -159,7 +159,9 @@ We soon ditched the "common latest" approach in picking the schema to test, in f
 
 </details>
 
-After a few back and forths, ChatGPT declared it's done with `AGENTS.md`.
+After a few back-and-forths, ChatGPT declared it's done with `AGENTS.md`
+
+<details>
 
 > What’s next (whenever you’re ready)
 >
@@ -173,14 +175,22 @@ After a few back and forths, ChatGPT declared it's done with `AGENTS.md`.
 >
 > For now, your AGENTS.md is complete and enforceable.
 
-Although ChatGPT loves to say "say the word", I never say the word.
+</details>
 
-I told GPT to start a `PLAN.md` file, which it eagerly generated without any input, so I tightened control.
+Although ChatGPT loves to ask me to "say the word", I never say the word.
 
+Instead, I told GPT to start a `PLAN.md` file, which it eagerly generated without any input, so I tightened control.
+
+<details>
 
 > before this, i need to add to the structure expectation. we have a generators/ directory, that will contain jsonnet files, and a Makefile at the root, which will use the generators to generate files in the ./schemas/ directory, which will contain project-level (meta) schemas, that will define and corral the shape of the data we care about (i.e. if we are aggregating from hyperfine output, we need to store the schema of the output from hyperfine; we will also have an optional meta-validation command that we can invoke from the makefile, that validates the stored output data to ensure they abide by the schema. any transformers that operate on the data we include in this repo should be subject to this process). does this make sense? if it does, add it to PLAN.md otherwise ask for clarification until you are crystal clear
 
-Soon after this, ChatGPT spelt out a directory layout for every experiment in the plan text + steps to set up a new experiment. My concern is that even if the experiment is run by an agent, the directory structures are unenforced. So I took a detour to make [dirschema](https://github.com/whacked/dirschema) first, a utility that uses json-schema to validate and hydrate a directory. From here on, the code generation is all Claude Code.
+</details>
+
+Soon after, ChatGPT spelt out a directory layout for every experiment in the plan text + steps to set up a new experiment.
+My concern is that even if the experiment is run by an agent, the directory structures are unenforced.
+So I took a detour to make [dirschema](https://github.com/whacked/dirschema) first, a utility that uses json-schema to validate and hydrate a directory.
+From here on, the code generation is all Claude Code.
 
 # getting test cases
 
@@ -354,7 +364,7 @@ Inspecting the `wrong_type_early` vs `wrong_type_late` cases here shows that the
 | valid   | jv                    | 681.2    | 168.91 | 31.96  | 924.05  |
 | invalid | jv                    | 670.93   | 242    | 19.75  | 898.57  |
 
-Across all tools, the average invalid time is less than the average valid time, but the difference is not statistically significant. This is not suprising if we expect the validators to validate every item in the array, even if the first element is invalid.
+Across all tools, the average invalid time is less than the average valid time, but the difference is not statistically significant. This is not surprising if we expect the validators to validate every item in the array, even if the first element is invalid.
 
 ## the non-Python validators
 
