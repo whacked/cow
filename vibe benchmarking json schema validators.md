@@ -10,7 +10,7 @@ _authored by a human_
 
 I like types... actually, types are ok.
 
-What I really like is knowing the shape of the data. When I jump into a function, set a breakpoint, or capture a packet, I first want to understand the landscape of the data in our environment; once we know what actors are on stage, I want to know what shapes they have. And once we have the shape -- in code or in data -- I like to have it in writing.
+What I really like is knowing the shape of data. When I jump into a function, set a breakpoint, or capture a packet, I first want to understand the landscape of the data in our environment; once we know what actors are on stage, I want to know what shapes they have. And once we have the shape -- in code or in data -- I like to have it in writing.
 
 There are a handful of tools that sit above any specific business logic and let us define language-agnostic structure definitions. A few well known ones:
 - [protobufs](https://protobuf.dev/)
@@ -35,7 +35,7 @@ So all we need to do, is take a program, prepare a baseline schema, and
 - create some dummy instance and validation that dummy instance against the schema
 - run the validation many times and average the run times
 
-Then I discussed this with a agent, and the problem took on many more dimensions! We ended up designing for how validation speed varies as a function of
+Then I discussed this with an agent, and the problem took on many more dimensions! We ended up designing for how validation speed varies as a function of
 - draft version
 - sdtin vs file input (who knows)
 - valid vs invalid data (maybe it exits early on invalid data, leading to faster exit)
@@ -73,21 +73,19 @@ Since I probably can't recall upfront all the things I want the agent to keep in
 
 <details>
 
-```
-our dev env is ALWAYS defined using shell.nix.
-
-the agent should know that we develop inside a nix-shell env; if we add/remove dependencies it will be through updating shell.nix. current project is called json-schema-cli-benchmark.
-
-we are going to create a benchmark repo to compare performance of different json schema clis.
-
-while we're at it, you can help me with scoping out the architecture of this repo.
-
-background:
-- our projects often use json schemas, so there is a lot of validation requirements during the dev cycle, both in validating the schemas (against metaschemas) or validating i/o data against our json schemas.
-- we are relatively conservative with the schema versions and don't use too many advanced features like in-schema pointers, because when we use json schemas as data shape ground truth, we do a lot of manual editing against them, so generally we like to keep the schemas human editable.
-- we have a command line centric workflow, bash or zsh, so a lot of the I/O validation would be to/from json files.
-- we also do a lot of stream piping, so for best ergonomics, we would want to have a validation flow that handles stdin/stdout. not a hard requirement if the validator is good enough.
-```
+> our dev env is ALWAYS defined using shell.nix.
+>
+> the agent should know that we develop inside a nix-shell env; if we add/remove dependencies it will be through updating shell.nix. current project is called json-schema-cli-benchmark.
+>
+> we are going to create a benchmark repo to compare performance of different json schema clis.
+>
+> while we're at it, you can help me with scoping out the architecture of this repo.
+>
+> background:
+> - our projects often use json schemas, so there is a lot of validation requirements during the dev cycle, both in validating the schemas (against metaschemas) or validating i/o data against our json schemas.
+> - we are relatively conservative with the schema versions and don't use too many advanced features like in-schema pointers, because when we use json schemas as data shape ground truth, we do a lot of manual editing against them, so generally we like to keep the schemas human editable.
+> - we have a command line centric workflow, bash or zsh, so a lot of the I/O validation would be to/from json files.
+> - we also do a lot of stream piping, so for best ergonomics, we would want to have a validation flow that handles stdin/stdout. not a hard requirement if the validator is good enough.
 
 </details>
 
@@ -254,11 +252,11 @@ Just for kicks, a second try from a clean slate had the same feel:
 
 ![](./img/2026/Screenshot_2026-02-07_020534_JSON-Schema-Benchmark-Explorer.png)
 
-Here's the version I accepted after requesting changing the viz to [ECharts](https://echarts.apache.org/en/index.html) and the frontend framework to [bootstrap](https://getbootstrap.com/), so I can pick the ([sketchy](https://bootswatch.com/sketchy/)) theme
+Here's the version I accepted after requesting changing the viz to [ECharts](https://echarts.apache.org/en/index.html) and the frontend framework to [bootstrap](https://getbootstrap.com/), so I can pick the [sketchy](https://bootswatch.com/sketchy/) theme
 
 ![](./img/2026/Screenshot_2026-02-08_231730_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-The viz is a single html file which I serve using `python3 -m http.server`. Claude devised an "auto-discover" mechanism to automatically load the data files in the `results/` directory by parsing the directory listing that python's server responds with for a directory without an index file.
+The viz is a single html file which I serve using `python3 -m http.server`. Claude devised an "auto-discover" mechanism to automatically load the data files in the `results/` directory by parsing the directory listing that python's server responds with for a directory without an index file, so this viz somewhat expects the python server.
 
 # results
 
@@ -403,16 +401,18 @@ they interestingly slow down on different things!
 
 I copied the experiment setup from `draft-04`, updated the target draft string, and reran both on my laptop.
 
-Uh... adding the breakdown to the interactively viz in the frontend was a bit tedious [1] so I succumbed to asking Claude to write python. Generally speaking, yes, draft-07 is slower.
+Uh... adding the breakdown to the interactively viz in the frontend was a bit tedious [^1] so I succumbed to asking Claude to write python. Generally speaking, yes, draft-07 is slower.
 
 ![](./img/2026/2026-02-07_174553.png)
 
-[1] we want to take the difference in hyperfine run time between the same tests run on `draft-07` vs on `draft-04`, and see whether it is significantly different from 0. After describing the approach in sufficient detail, I didn't think it was worth adding a highly specialized plot into the interactive page, so asked claude to make a one-off python script.
+[^1]: we want to take the difference in hyperfine run time between the same tests run on `draft-07` vs on `draft-04`, and see whether it is significantly different from 0. After describing the approach in sufficient detail, I didn't think it was worth adding a highly specialized plot into the interactive page, so asked claude to make a one-off python script.
 
 # epilogue
 
-after reviewing the project repo I was extremely annoyed by the output file hierarchy. There were 6000+ directories in every full run, one directory per test case. This was likely the result of instructing the agent to output raw, prettified json by default, and since we were only capturing hyperfine json output, it simply saved every job's output to its own directory. Under small, frequently manually inspected cases, this is reasonable, but this made a large part of the data storage cost driven by inode count rather than bytes of data.
+After reviewing the project repo files, I was extremely annoyed by the output file hierarchy: there were 6000+ directories in every full run, one directory per test case. This was likely the result of instructing the agent to output raw, prettified json by default; since we were only capturing hyperfine json output, it saved every job's output to its own directory. This strategy is reasonable for small, infrequent, and manually inspected cases, but with this many files, we waste a lot of space on disk block allocations rather than bytes of data. After more back-and-forth, we get the current organization, which produces much fewer files, and wraps most interaction through a giant justfile.
 
 ## further exploration
 
-there are certainly more angles to explore the data. the data and code for the results covered here are at https://github.com/whacked/json-schema-cli-benchmarks; the data are pushed using git-lfs
+There are certainly more angles to explore the data. The data and code for the results covered here are at https://github.com/whacked/json-schema-cli-benchmarks.
+
+If you have a recent (2025+) [nix environment](https://nixos.org/download/#download-nix) installed, cloning the repo, cd, and `nix-shell` should set up all the tooling needed to run / reproduce / download the results.
