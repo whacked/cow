@@ -254,11 +254,11 @@ Just for kicks, a second try from a clean slate had the same feel:
 
 ![](./img/2026/Screenshot_2026-02-07_020534_JSON-Schema-Benchmark-Explorer.png)
 
-Here's the version I accepted after requesting changing the viz to [ECharts](https://echarts.apache.org/en/index.html) and the frontend framework to [bootstrap](https://getbootstrap.com/), so I can pick the ([sketchy](https://bootswatch.com/sketchy/)) theme
+Here's the version I accepted after requesting changing the viz to [ECharts](https://echarts.apache.org/en/index.html) and the frontend framework to [bootstrap](https://getbootstrap.com/), so I can pick the [sketchy](https://bootswatch.com/sketchy/) theme
 
 ![](./img/2026/Screenshot_2026-02-08_231730_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-The viz is a single html file which I serve using `python3 -m http.server`. Claude devised an "auto-discover" mechanism to automatically load the data files in the `results/` directory by parsing the directory listing that python's server responds with for a directory without an index file.
+The viz is a single html file which I serve using `python3 -m http.server`. Claude devised an "auto-discover" mechanism to automatically load the data files in the `results/` directory by parsing the directory listing that python's server responds with for a directory without an index file, so this viz somewhat expects the python server.
 
 # results
 
@@ -411,8 +411,10 @@ Uh... adding the breakdown to the interactively viz in the frontend was a bit te
 
 # epilogue
 
-after reviewing the project repo I was extremely annoyed by the output file hierarchy. There were 6000+ directories in every full run, one directory per test case. This was likely the result of instructing the agent to output raw, prettified json by default, and since we were only capturing hyperfine json output, it simply saved every job's output to its own directory. Under small, frequently manually inspected cases, this is reasonable, but this made a large part of the data storage cost driven by inode count rather than bytes of data.
+After reviewing the project repo files, I was extremely annoyed by the output file hierarchy: there were 6000+ directories in every full run, one directory per test case. This was likely the result of instructing the agent to output raw, prettified json by default; since we were only capturing hyperfine json output, it saved every job's output to its own directory. This strategy is reasonable for small, infrequent, and manually inspected cases, but with this many files, we waste a lot of space on disk block allocations rather than bytes of data. After more back-and-forth, we get the current organization, which produces much fewer files, and wraps most interaction through a giant justfile.
 
 ## further exploration
 
-there are certainly more angles to explore the data. the data and code for the results covered here are at https://github.com/whacked/json-schema-cli-benchmarks; the data are pushed using git-lfs
+There are certainly more angles to explore the data. The data and code for the results covered here are at https://github.com/whacked/json-schema-cli-benchmarks.
+
+If you have a recent (2025+) [nix environment](https://nixos.org/download/#download-nix) installed, cloning the repo, cd, and `nix-shell` should set up all the tooling needed to run / reproduce / download the results.
