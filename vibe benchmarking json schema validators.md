@@ -248,15 +248,15 @@ At this point the project has already ballooned into more than I wished for and 
 
 The first version was quick work, but came with a "[signature](https://old.reddit.com/r/ClaudeCode/comments/1pxqjvq/how_to_make_claude_stop_designing_gradient/) [purple](https://prg.sh/ramblings/Why-Your-AI-Keeps-Building-the-Same-Purple-Gradient-Website)" look that seems to be common with claude.
 
-![](./img/2026/Screenshot_2026-02-07_020543-JSON-Schema-Benchmark-Explorer.png)
+![](./img/2026/Screenshot_2026-02-07_020543_JSON-Schema-Benchmark-Explorer.png)
 
 Just for kicks, a second try from a clean slate had the same feel:
 
-![](./img/2026/Screenshot_2026-02-07_020534-JSON-Schema-Benchmark-Explorer.png)
+![](./img/2026/Screenshot_2026-02-07_020534_JSON-Schema-Benchmark-Explorer.png)
 
 Here's the version I accepted after requesting changing the viz to [ECharts](https://echarts.apache.org/en/index.html) and the frontend framework to [bootstrap](https://getbootstrap.com/), so I can pick the ([sketchy](https://bootswatch.com/sketchy/)) theme
 
-![](./img/2026/Screenshot_2026-02-08_231730-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-08_231730_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 The viz is a single html file which I serve using `python3 -m http.server`. Claude devised an "auto-discover" mechanism to automatically load the data files in the `results/` directory by parsing the directory listing that python's server responds with for a directory without an index file.
 
@@ -270,14 +270,14 @@ with the caveat that the schema sizes in the experiment dataset are generally < 
 
 A big part of this has got to be from Python startup. But since we care about CLI usage here, it counts every time!
 
-![](./img/2026/Screenshot_2026-02-07_165205-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_165205_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 
 ## sourcemeta's jsonschema is bad at processing increasing enums
 
-![](./img/2026/Screenshot_2026-02-07_165336-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_165336_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-![](./img/2026/Screenshot_2026-02-07_165542-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_165542_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 The interesting jump in runtimes around the 10KB payload size happens for all the enum tests for `sourcemeta-jsonschema`
 
@@ -285,7 +285,7 @@ The interesting jump in runtimes around the 10KB payload size happens for all th
 
 (`check-jsonschema` excluded henceforth)
 
-![](./img/2026/Screenshot_2026-02-08_232752-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-08_232752_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 the exponential-looking increase matches the exponential increase in case-size in the generation script so it's a linear increase in runtime; no surprise here.
 
@@ -368,9 +368,9 @@ Across all tools, the average invalid time is less than the average valid time, 
 
 ## the non-Python validators
 
-then, excluding the `enum_uniqueItems` cases that trip up `sourcemeta-jsonschema`'s validator,
+then, excluding the `enum_uniqueItems` cases that trip up `sourcemeta-jsonschema`'s validator.
 
-![](./img/2026/Screenshot_2026-02-07_170541-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_170541_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 | Tool                  | N    | Avg (ms) | Std    | Min  | Max    |
 |-----------------------|------|----------|--------|------|--------|
@@ -378,11 +378,11 @@ then, excluding the `enum_uniqueItems` cases that trip up `sourcemeta-jsonschema
 | jv                    | 1333 | 45.8     | 103.36 | 8.96 | 924.05 |
 | jsonschema-sourcemeta | 1332 | 56.87    | 91.61  | 8.08 | 789.09 |
 
-![](./img/2026/Screenshot_2026-02-07_170548-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_170548_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 **Looks like Stranger6667's validator runs faster overall.**
 
-![](./img/2026/Screenshot_2026-02-07_170723-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_170723_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 | Tool           | N    | Avg (ms) | Std   | Min  | Max    |
 |----------------|------|----------|-------|------|--------|
@@ -393,11 +393,11 @@ so that answers our initial question.
 
 Then, if we remove the tests that run longer than 100ms (`array_objects_L_{valid,invalid}`, `object_deep_XL_{valid,invalid}`)
 
-![](./img/2026/Screenshot_2026-02-07_170924-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_170924_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 they interestingly slow down on different things!
 
-![](./img/2026/Screenshot_2026-02-07_170931-JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-07_170931_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 ## what about different draft versions?
 
