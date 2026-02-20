@@ -61,7 +61,9 @@ So we look around for tools that are packaged as a single command line executabl
 - `jsonschema-sourcemeta`: [sourcemeta's jsonschema v12.9.3](https://github.com/sourcemeta/jsonschema/)
 - `jsonschema-cli`: [Stranger6667's jsonschema v0.38.1](https://github.com/Stranger6667/jsonschema)
 
-Note that some of these tools are not the latest version, because I used tools with the shortest path to inclusion into `shell.nix`.
+Note that some of these tools are not the latest version, because I used tools with the shortest path to inclusion into `shell.nix`. [^3]
+
+[^3]: `jsonschema-sourcemeta` builds and runs as-is on ubuntu + nix, but not on my mac. Claude came up with the fixes in `shell.nix` required to get it to run. I don't know how this affects results
 
 # making the agent do the work
 
@@ -268,14 +270,21 @@ with the caveat that the schema sizes in the experiment dataset are generally < 
 
 A big part of this has got to be from Python startup. But since we care about CLI usage here, it counts every time!
 
-![](./img/2026/Screenshot_2026-02-07_165205_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_103305_JSON-Schema-CLI-Benchmark-Analysis.png)
 
+`sourcemeta` also appears quite slow. In fact, in this plot, we don't count any of the XL test cases. Once they are included, it becomes the slowest!
+
+![](./img/2026/Screenshot_2026-02-20_103911_JSON-Schema-CLI-Benchmark-Analysis.png)
+
+I reran the benchmark on an x86 linux machine and sourcemeta shows a different trend!
+
+![](./img/2026/Screenshot_2026-02-20_154918_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 ## sourcemeta's jsonschema is bad at processing increasing enums
 
-![](./img/2026/Screenshot_2026-02-07_165336_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_104328_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-![](./img/2026/Screenshot_2026-02-07_165542_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_104519_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 The interesting jump in runtimes around the 10KB payload size happens for all the enum tests for `sourcemeta-jsonschema`
 
@@ -283,12 +292,12 @@ The interesting jump in runtimes around the 10KB payload size happens for all th
 
 (`check-jsonschema` excluded henceforth)
 
-![](./img/2026/Screenshot_2026-02-08_232752_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_110632_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 the exponential-looking increase matches the exponential increase in case-size in the generation script so it's a linear increase in runtime; no surprise here.
 
 ```sh
-for f in experiments/draft-04/cases/array_objects_*_valid/instances/gen_0000.json; do echo $f; cat $f |
+for f in experiments/draft-04/cases/array_objects_{S,M,L,XL}_valid/instances/gen_0000.json; do echo $f; cat $f |
   jq '.[]|length' |
   uniq -c;
 done
@@ -351,16 +360,16 @@ head -7 experiments/draft-04/cases/array_objects_S_invalid/instances/wrong_type_
 
 Inspecting the `wrong_type_early` vs `wrong_type_late` cases here shows that the generated invalid cases are actually **incorrect** for `wrong_type_late`: the wrong types are _also_ early. I don't want to tell Claude to fix this, so we just treat all `array_object_*_invalid` cases the same. If there is short-circuiting, we should see a substantially shorter validation time.
 
-| Case    | Tool                  | Avg (ms) | Std    | Min    | Max     |
-|---------|-----------------------|----------|--------|--------|---------|
-| valid   | check-jsonschema      | 3141.35  | 597.9  | 507.84 | 4067.65 |
-| invalid | check-jsonschema      | 3037.94  | 933.95 | 529.42 | 4112.94 |
-| valid   | jsonschema-cli        | 180.6    | 40.76  | 7.87   | 267.64  |
-| invalid | jsonschema-cli        | 175.36   | 64.96  | 5.73   | 262.9   |
-| valid   | jsonschema-sourcemeta | 561.25   | 138.36 | 48.41  | 789.09  |
-| invalid | jsonschema-sourcemeta | 484.61   | 160.16 | 53.57  | 666.13  |
-| valid   | jv                    | 681.2    | 168.91 | 31.96  | 924.05  |
-| invalid | jv                    | 670.93   | 242    | 19.75  | 898.57  |
+| Case    | Tool                  | Mode | N   | Avg (ms) | Std    | Min    | Max    |
+|---------|-----------------------|------|-----|----------|--------|--------|--------|
+| valid   | jsonschema-cli        | file | 336 | 23.1     | 20.03  | 7.59   | 61.4   |
+| invalid | jsonschema-cli        | file | 144 | 22.2     | 19.69  | 7.69   | 64.35  |
+| valid   | jv                    | file | 336 | 55.55    | 57.54  | 10.27  | 199.13 |
+| invalid | jv                    | file | 144 | 52.06    | 56.17  | 10.36  | 179.81 |
+| valid   | jsonschema-sourcemeta | file | 336 | 79.54    | 91.85  | 8.43   | 276.78 |
+| invalid | jsonschema-sourcemeta | file | 144 | 58.54    | 66.79  | 8.42   | 204.89 |
+| valid   | check-jsonschema      | file | 336 | 349.54   | 233.02 | 153.48 | 795.96 |
+| invalid | check-jsonschema      | file | 144 | 336.06   | 228.81 | 154.32 | 795.26 |
 
 Across all tools, the average invalid time is less than the average valid time, but the difference is not statistically significant. This is not surprising if we expect the validators to validate every item in the array, even if the first element is invalid.
 
@@ -368,44 +377,53 @@ Across all tools, the average invalid time is less than the average valid time, 
 
 then, excluding the `enum_uniqueItems` cases that trip up `sourcemeta-jsonschema`'s validator.
 
-![](./img/2026/Screenshot_2026-02-07_170541_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_104918_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-| Tool                  | N    | Avg (ms) | Std    | Min  | Max    |
-|-----------------------|------|----------|--------|------|--------|
-| jsonschema-cli        | 1320 | 23.98    | 30.85  | 5.73 | 267.64 |
-| jv                    | 1333 | 45.8     | 103.36 | 8.96 | 924.05 |
-| jsonschema-sourcemeta | 1332 | 56.87    | 91.61  | 8.08 | 789.09 |
+| Tool                  | Mode | N    | Avg (ms) | Std   | Min  | Max    |
+|-----------------------|------|------|----------|-------|------|--------|
+| jsonschema-cli        | file | 5328 | 9.98     | 7.22  | 7.12 | 84.54  |
+| jv                    | file | 5328 | 15.78    | 21.03 | 9.35 | 199.13 |
+| jsonschema-sourcemeta | file | 4876 | 21.51    | 32.96 | 8.04 | 276.78 |
 
-![](./img/2026/Screenshot_2026-02-07_170548_JSON-Schema-CLI-Benchmark-Analysis.png)
+
+![](./img/2026/Screenshot_2026-02-20_110820_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 **Looks like Stranger6667's validator runs faster overall.**
 
-![](./img/2026/Screenshot_2026-02-07_170723_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_111221_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-| Tool           | N    | Avg (ms) | Std   | Min  | Max    |
-|----------------|------|----------|-------|------|--------|
-| jsonschema-cli | 1230 | 17.39    | 10.44 | 6.17 | 107.18 |
-| jv             | 1243 | 27.1     | 5.52  | 8.96 | 73.33  |
+| Tool           | Mode | N    | Avg (ms) | Std   | Min  | Max    |
+|----------------|------|------|----------|-------|------|--------|
+| jsonschema-cli | file | 5812 | 9.94     | 6.92  | 7.12 | 84.54  |
+| jv             | file | 5812 | 15.65    | 20.15 | 9.35 | 199.13 |
 
 so that answers our initial question.
 
-Then, if we remove the tests that run longer than 100ms (`array_objects_L_{valid,invalid}`, `object_deep_XL_{valid,invalid}`)
+If we focus on these tools and remove the slowest tests (`array_objects_{L,XL}_{valid,invalid}`), there is some interesting behavior between the mac and linux results
 
-![](./img/2026/Screenshot_2026-02-07_170924_JSON-Schema-CLI-Benchmark-Analysis.png)
+![](./img/2026/Screenshot_2026-02-20_155706_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-they interestingly slow down on different things!
+![](./img/2026/Screenshot_2026-02-20_155855_JSON-Schema-CLI-Benchmark-Analysis.png)
 
-![](./img/2026/Screenshot_2026-02-07_170931_JSON-Schema-CLI-Benchmark-Analysis.png)
+they slow down on different things! The slowest entries for `jsonschema-cli` on the linux benchmark is `object_deep_XL_valid`.
+
+![](./img/2026/Screenshot_2026-02-20_160115_JSON-Schema-CLI-Benchmark-Analysis.png)
 
 ## what about different draft versions?
 
-I copied the experiment setup from `draft-04`, updated the target draft string, and reran both on my laptop.
+To do this, I copied the experiment setup from `draft-04`, updated the target draft string, and ran both on my laptop.
 
-Uh... adding the breakdown to the interactively viz in the frontend was a bit tedious [^1] so I succumbed to asking Claude to write python. Generally speaking, yes, draft-07 is slower.
+Earlier runs where I seemed to encounter possible run-order effects that showed significantly different run times between draft-04 and draft-07. To counterbalance, we open 2 separate terminals and run e.g. `just run draft-04 -j 4; just run draft-07 -j 4` in one, and in the other we run `just run draft-07 -j 4; just run draft-04 -j 4`, and combine the results.
 
-![](./img/2026/2026-02-07_174553.png)
+Uh... adding the breakdown to the interactively viz in the frontend was a bit tedious [^1] so I succumbed to asking Claude to write python.
+
+It appears that draft-07 is slightly slower on linux for `jsonschema-cli`, for `sourcemeta` it's faster! [^2]
+
+![](./img/2026/2026-02-20_161536.png)
 
 [^1]: we want to take the difference in hyperfine run time between the same tests run on `draft-07` vs on `draft-04`, and see whether it is significantly different from 0. After describing the approach in sufficient detail, I didn't think it was worth adding a highly specialized plot into the interactive page, so asked claude to make a one-off python script.
+
+[^2]: in a previous run on a different system, _all_ tools exhibited a slow down. But on the mac m4 pro, we observed sourcemeta's speedup. Thinking this was a run-order effect (maybe there's throttling), I did a rerun; the slow down mostly disappeared, while `sourcemeta`'s speedup persisted!
 
 # epilogue
 
